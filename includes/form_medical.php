@@ -49,11 +49,7 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
     </div>
     
     <div class="info-field">
-<<<<<<< HEAD
         <label class="label-form" for="patient_id">Nombre del Paciente:</label>
-=======
-        <label for="patient_id">Nombre del Paciente:</label>
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d
         <span><?php echo $nombrePaciente; ?></span>
     </div>
 
@@ -201,19 +197,11 @@ if ($firma_id) {
  <form id="formReceta">
     <!-- Campos de la receta -->
     <div class="campo">
-<<<<<<< HEAD
         <label class="label-form" for="id_doctor" style="display:none;">ID Doctor:</label>
         <input type="text" id="id_doctor" name="id_doctor" style="display:none;"  value="" disabled>
     </div>
     <div class="campo">
         <label class="label-form" for="id_paciente" style="display:none;">ID Paciente:</label>
-=======
-        <label for="id_doctor" style="display:none;">ID Doctor:</label>
-        <input type="text" id="id_doctor" name="id_doctor" style="display:none;"  value="<?php  echo htmlspecialchars($user_id); ?>" disabled>
-    </div>
-    <div class="campo">
-        <label for="id_paciente" style="display:none;">ID Paciente:</label>
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d
         <input type="text" id="id_paciente" name="id_paciente" style="display:none;" value="<?php echo htmlspecialchars($id); ?>" disabled>
     </div>
     <div class="campo">

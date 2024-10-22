@@ -222,27 +222,15 @@ function midocdoc_generar_pdf_handler() {
     if (isset($_GET['midocdoc_generar_pdf'])) {
         $id_reporte = intval($_GET['midocdoc_generar_pdf']);
         require_once plugin_dir_path(__FILE__) . 'procces/generar-pdf.php';
-<<<<<<< HEAD
         midocdoc_generar_pdf($id_reporte);
-=======
-        midocdoc_generar_pdf($id_reporte); // Asegúrate de que esta función exista y genere el PDF.
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d
         exit;
     }
 
     if (isset($_GET['midocdoc_enviar_email'])) {
-<<<<<<< HEAD
         $id_paciente = intval($_GET['midocdoc_enviar_email']);
         $informe_id = isset($_GET['informe_id']) ? intval($_GET['informe_id']) : null;
         require_once plugin_dir_path(__FILE__) . 'procces/send_email.php';
         midocdoc_enviar_email($id_paciente, $informe_id);
-=======
-        $id_paciente = intval($_GET['midocdoc_enviar_email']); // Obtiene el ID del paciente de la URL
-        $informe_id = isset($_GET['informe_id']) ? intval($_GET['informe_id']) : null; // Obtiene el ID del informe si está presente
-    
-        require_once plugin_dir_path(__FILE__) . 'procces/send_email.php';
-        midocdoc_enviar_email($id_paciente, $informe_id); // Envía los IDs a la función
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d
         exit;
     }
 }
