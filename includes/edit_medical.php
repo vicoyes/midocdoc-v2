@@ -38,7 +38,7 @@ function cargar_edit_medical_content() {
             </div>
 
             <div class="info-field">
-                <label class="label-form" for="id_doctor">Datos del Medico Tratante:</label>
+                <label class="label-form" for="id_doctor">Datos del Medico Tratante</label>
                 <span id="id_doctor"><?php echo esc_html($nombre_medico); ?></span>
             </div>
 

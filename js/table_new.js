@@ -262,7 +262,7 @@ function agregarMiElemento() {
     if (contenedor) {
         const nuevoElemento = document.createElement('a');
         nuevoElemento.textContent = 'Ver Informes';
-        nuevoElemento.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form&id=${customerId}`;
+        nuevoElemento.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`;
         contenedor.insertBefore(nuevoElemento, contenedor.firstChild);
     }
 }
@@ -323,7 +323,7 @@ function citasmedicasform() {
                     const a = document.createElement("a");
                     a.id = "btn-listo";
                     a.innerHTML = "Volver";
-                    a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form&id=${customerId}`;
+                    a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`;
                     document.getElementById('mensajeRespuesta').appendChild(a);
                     document.getElementById('contenedor-botones-guarda').style.display = "none";
                     document.querySelector('span.cerrar').style.display = "none";
@@ -337,10 +337,14 @@ function citasmedicasform() {
     });
 }
 
+// Variable global para almacenar el event listener
+let btnAgregarListener;
+
 function iniciarAgregarMedicamento() {
     const buttonGuardar = document.getElementById('enviar-form-citas-medicas-abajo');
     buttonGuardar.style.display = "block";
 
+    // Establecer fecha actual
     const fechaRecetaInput = document.getElementById('fecha_receta');
     const fechaActual = new Date();
     const fechaFormatted = fechaActual.toISOString().slice(0, 10);
@@ -348,33 +352,58 @@ function iniciarAgregarMedicamento() {
 
     const btnAgregar = document.getElementById('btnAgregar');
     const listaMedicamentos = document.getElementById('listaMedicamentos');
-    let idMedicamento = 0;
 
-    btnAgregar.addEventListener('click', () => {
-        const idActual = idMedicamento++;
+    // Remover el listener anterior si existe
+    if (btnAgregarListener) {
+        btnAgregar.removeEventListener('click', btnAgregarListener);
+    }
+
+    // Inicializar el contador de ID si no existe
+    window.medicamentoIdCounter = window.medicamentoIdCounter || 0;
+
+    // Definir el nuevo listener
+    btnAgregarListener = () => {
+        const idActual = window.medicamentoIdCounter++;
         const nuevoMedicamento = document.createElement('div');
         nuevoMedicamento.className = 'medicamento';
 
         const ulMedicamento = document.createElement('ul');
-        const propiedades = ['descricion', 'presentation', 'concentration', 'administration_route', 'quantity', 'dosage'];
+        
+        const propiedades = [
+            'descricion',
+            'presentation', 
+            'concentration',
+            'administration_route',
+            'quantity',
+            'dosage'
+        ];
+
         const medicamentoActual = {};
 
         const obtenerTextoEnEspanol = propiedad => {
-            switch (propiedad) {
-                case 'descricion': return 'Descripción';
-                case 'presentation': return 'Presentación';
-                case 'concentration': return 'Concentración';
-                case 'administration_route': return 'Vía de Administración';
-                case 'quantity': return 'Cantidad';
-                case 'dosage': return 'Dosificación';
-                default: return propiedad;
-            }
+            const traducciones = {
+                'descricion': 'Descripción',
+                'presentation': 'Presentación',
+                'concentration': 'Concentración',
+                'administration_route': 'Vía de Administración',
+                'quantity': 'Cantidad',
+                'dosage': 'Dosificación'
+            };
+            return traducciones[propiedad] || propiedad;
         };
+
+        // Inicializar el array de medicamentos si no existe
+        if (!window.medicamentos) {
+            window.medicamentos = [];
+        }
 
         propiedades.forEach(propiedad => {
             const label = obtenerTextoEnEspanol(propiedad);
-            const valor = document.getElementById(propiedad).value;
+            const input = document.getElementById(propiedad);
+            const valor = input ? input.value : '';
+            
             medicamentoActual[label.toLowerCase()] = valor;
+
             const li = document.createElement('li');
             li.textContent = `${label}: ${valor}`;
             li.className = propiedad;
@@ -386,9 +415,13 @@ function iniciarAgregarMedicamento() {
 
         const btnEliminar = document.createElement('button');
         btnEliminar.textContent = 'Eliminar';
+        //agrega la clase al button crea
+        btnEliminar.classList.add('btn-eliminar');
         btnEliminar.addEventListener('click', () => {
             listaMedicamentos.removeChild(nuevoMedicamento);
-            window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idActual);
+            window.medicamentos = window.medicamentos.filter(
+                medicamento => medicamento.id !== idActual
+            );
             console.log('Medicamentos después de eliminar:', window.medicamentos);
         });
 
@@ -396,22 +429,31 @@ function iniciarAgregarMedicamento() {
         nuevoMedicamento.appendChild(btnEliminar);
         listaMedicamentos.appendChild(nuevoMedicamento);
 
+        // Limpiar campos
         propiedades.forEach(propiedad => {
-            document.getElementById(propiedad).value = '';
+            const input = document.getElementById(propiedad);
+            if (input) {
+                input.value = '';
+            }
         });
 
+        // Reiniciar contadores
         const campos = document.querySelectorAll('.campo-recetas');
         campos.forEach(campo => {
             campo.value = '';
             const contador = campo.nextElementSibling;
-            const maxLength = campo.getAttribute('maxlength');
-            contador.textContent = `0/${maxLength}`;
-            if (contador.classList.contains('bajo')) {
+            if (contador) {
+                const maxLength = campo.getAttribute('maxlength');
+                contador.textContent = `0/${maxLength}`;
                 contador.classList.remove('bajo');
             }
         });
-    });
+    };
+
+    // Agregar el nuevo listener
+    btnAgregar.addEventListener('click', btnAgregarListener);
 }
+
 
 function mostrarPopup() {
     const popup = document.getElementById('miPopup');

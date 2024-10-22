@@ -222,7 +222,7 @@ console.log(customerId);
         let nuevoElemento = document.createElement('a');
         nuevoElemento.textContent = 'Ver Informes';
         let urlBase = window.location.origin;
-        nuevoElemento.href = `${urlBase}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form&id=${customerId}`
+        nuevoElemento.href = `${urlBase}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`
         contenedor.insertBefore(nuevoElemento, contenedor.firstChild);
     }
 
@@ -526,11 +526,7 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
-<<<<<<< HEAD
 fetch( midocdoc_vars.plugin_url + '../procces/send_email.php', {
-=======
-fetch( plugin_dir_url(__FILE__) + '../procces/send_email.php', {
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d
     method: 'POST',
     body: new FormData(document.getElementById('tu-formulario'))
 })
@@ -544,7 +540,6 @@ fetch( plugin_dir_url(__FILE__) + '../procces/send_email.php', {
 })
 .catch(error => {
     showPopup('Ocurrió un error: ' + error);
-<<<<<<< HEAD
 });
 
 
@@ -579,6 +574,3 @@ function contador(){
         };
     });
 }
-=======
-});
->>>>>>> ba870f142a10dfa9c2b780a68c8b10f66b5cf35d

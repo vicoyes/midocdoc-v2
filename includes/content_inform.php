@@ -2,6 +2,8 @@
 
 <?php
 $id_paciente = isset($_GET['id']) ? $_GET['id'] : 'No se proporcionó ID';
+session_start();
+$_SESSION['id_paciente'] = $id_paciente;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -16,7 +18,7 @@ $nombrePaciente = $customer->first_name . ' ' . $customer->last_name;
 $midocdoc_model = new Midocdoc_Model();
 $citas_medicas = $midocdoc_model->get_informacion_completa_medico($current_user_id, $id_paciente);
 
-echo '<div id="inform_medical"> <a class="latepoint-btn latepoint-btn-link ver-detalles" id="ver-detalles BtnInformNew" ><i class="latepoint-icon latepoint-icon-plus"></i> Nuevo informe</a>  </div>';
+echo '<div id="inform_medical" pacient_id="' . $id_paciente . '"> <a class="latepoint-btn latepoint-btn-link ver-detalles" id="ver-detalles BtnInformNew" ><i class="latepoint-icon latepoint-icon-plus"></i> Nuevo informe</a>  </div>';
 
 usort($citas_medicas->informes, function($a, $b) {
     $fechaHoraA = strtotime($a->report_date);
@@ -41,10 +43,6 @@ foreach ($citas_medicas->informes as $informe) {
     ?>
     <div class='appointment-card white-box-content' id='appointment-card-<?php echo $informe->id; ?>'>
         <div class='appointment-date'>
-            <p>
-                <i class="latepoint-icon latepoint-icon-calendar"></i>
-                <?php echo $informe->report_date; ?>
-            </p>
             <div class='appointment-actions'>
                 <a href="?midocdoc_enviar_email=<?php echo $id_paciente; ?>&informe_id=<?php echo $informe->id; ?>" 
                    class='button-action'>
@@ -63,7 +61,7 @@ foreach ($citas_medicas->informes as $informe) {
         </div>
         
         <div class='appointment-details'>
-            <h3>Paciente <strong><?php echo $nombrePaciente; ?></strong></h3>
+            <h3><?php echo $nombrePaciente; ?></h3>
             <p class="paciente-name">Dr <?php echo $nombre_completo_medico; ?></p>
             
         </div>
@@ -74,7 +72,14 @@ foreach ($citas_medicas->informes as $informe) {
                     <div class='diagnosis-section'>
                         <h4>Diagnóstico</h4>
                         <p><?php echo $citaMedica->diagnosis; ?></p>
-                        <p class='numero informe appointment-date '>Informe #<?php echo $informe->id; ?></p>
+                        <div class='footer-card'>
+                        <p>
+                <i class="latepoint-icon latepoint-icon-calendar"></i>
+                <?php echo $informe->report_date; ?>
+            </p>
+            <p class='informe'>#<?php echo $informe->id; ?></p>
+                        </div>
+                        
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>

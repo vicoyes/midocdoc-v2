@@ -166,7 +166,8 @@ body > div.latepoint-side-panel-w > div.booking-messages-wrapper.booking-message
   .appointment-date {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    padding-bottom: 15px;
 }
   
 
@@ -236,11 +237,11 @@ body > div.latepoint-side-panel-w > div.booking-messages-wrapper.booking-message
 /* Estilo del contenido de la pestaña */
 .tabcontent {
   display: none;
-  padding: 6px 12px;
+  padding: 40px 0px;
   /*border: 1px solid #ccc !important;*/
   border-top: none;
   width: 100%;
-  padding: 40px;
+
   border-radius: 10px;
 }
 
@@ -274,7 +275,6 @@ body > div.latepoint-side-panel-w > div.booking-messages-wrapper.booking-message
 .formulario-citas-medicas input[type="submit"], .formulario-antecedentes-medicos input[type="submit"], #recetas {
   /*background-color: var(--color-principal)!important;
   color: white;*/
-  padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -431,10 +431,6 @@ button#btnAgregar{
   font-size: 16px;
 }
 
-.diagnosis-section {
-    max-width: 370px;
-}
-
 .formulario-medicamentos input[type="submit"]:hover {
   background-color: #45a049;
 }
@@ -483,7 +479,6 @@ button#btnAgregar{
 .formulario-receta {
   width: 100%;
   margin: 0 auto;
-  padding: 20px;
   border-radius: 8px;
 }
 
@@ -608,22 +603,19 @@ body.latepoint-admin .latepoint-btn.latepoint-btn-outline.latepoint-btn-grey, bo
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
-  padding: 10px;
-  background-color: #e3e3e3;
+  padding: 25px;
+  background-color: #1d7bff12;
   border-radius: 4px;
+  align-items: flex-start;
 }
 
-.eliminar-btn {
-  padding: 5px 10px;
-  background-color: red;
-  color: white;
+.btn-eliminar {
   border: none;
-  border-radius: 4px;
+  background: none;
+  color: #2c408c;
+  text-decoration: underline;
+  font-size: 14;
   cursor: pointer;
-}
-
-.eliminar-btn:hover {
-  background-color: darkred;
 }
 
 
@@ -658,15 +650,19 @@ div#inform_medical {
   justify-content: end;
 }
 
-button.button-action {
-  border: none;
-  background: #fff;
-  color: var(--color-principal);
-  font-weight: 500;
-  border-bottom: 1px dotted var(--color-principal);
-  cursor: pointer;
-  line-height: 1.5;
-  font-size: 16px;
+
+
+.button-action {
+  border: none !important;
+  background: #fff !important;
+  color: var(--color-principal) !important;
+  font-weight: 500 !important;
+  border-bottom: 1px dotted var(--color-principal) !important;
+  cursor: pointer !important;
+  line-height: 0px !important;
+  font-size: 13px !important;
+  text-decoration: none;
+  margin-left: 10px;
 }
 
 
@@ -680,7 +676,6 @@ div#content-midocdoc {
 
 .formulario-citas-medicas-info {
   padding: 25px;
-  background: #f4f4f4;
   border-radius: 10px;
   border: 1px solid #ddd;
 }
@@ -1058,12 +1053,14 @@ h2 {
       transform: rotate(90deg);
   }
 
-  /* Contenido del sidebar */
-  #container-para-formulario {
-      padding: 20px;
-      margin-top: 40px; /* Espacio para el botón de cierre */
-      flex-direction: column;
-  }
+  /* Contenido del sidebar */#container-para-formulario {
+    padding: 20px;
+    /* margin-top: 40px; */
+    flex-direction: column;
+    max-width: 750px;
+    margin: auto;
+    margin-top: 20px;
+}
 
   .label-form {
     font-family: 'Inter', sans-serif !important;
@@ -1077,5 +1074,29 @@ p.numero.informe.appointment-date {
   display: block;
 }
 
+.footer-card {
+  display: flex;
+  align-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #788291;
+}
 
+.footer-card p{
+  font-size: 12px;
+}
 
+.contador-caracteres {
+  font-size: 11px;
+  text-align: right;
+  color: #a3a3a3;
+}
+
+.contador-caracteres.bajo {
+  color: red;
+}
+
+label.label-form.cabecera {
+  font-weight: bold !important;
+}

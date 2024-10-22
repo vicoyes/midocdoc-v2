@@ -2,10 +2,10 @@
 
 <?php
 
-$id = 1;
+session_start();
+$id_paciente = isset($_SESSION['id_paciente']) ? $_SESSION['id_paciente'] : null;
 
-include '../wp-contentwp-content/plugins/latepoint/lib/models/customer_model.php';
-
+$id = $id_paciente;
 
 echo'<div class="tab">
 <button class="tablinks" onclick="openForm(event, \'CitasMedicas\'); citasmedicasform();" id="tabs-citas-medicas">Informe Medico</button>
@@ -34,22 +34,22 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
 <div class="formulario-citas-medicas-info">
 
     <div class="info-field">
-        <label class="label-form" for="id_inform">ID Informe:</label>
-        <span id="id_inform">54321</span>
+        <label class="label-form cabecera" for="id_inform">ID Informe</label>
+        <span id="id_inform">No Generado</span>
     </div>
 
     <div class="info-field">
-        <label class="label-form" for="id_doctor">Datos del Medico Tratante</label>
-        <span id="id_doctor"><?php echo ' Dr: ' . $first_name . ' ' . $last_name . '  ('. 'id: ' . $user_id .')';  ?></span>
+        <label class="label-form cabecera" for="id_doctor">Datos del Medico Tratante</label>
+        <span id="id_doctor"><?php echo ' Dr. ' . $first_name . ' ' . $last_name . '  ';  ?></span>
     </div>
 
     <div class="info-field">
-        <label class="label-form" for="patient_id">ID del Paciente:</label>
+        <label class="label-form cabecera" for="patient_id">ID del Paciente</label>
         <span id="patient_id"><?php echo $id; ?></span>
     </div>
     
     <div class="info-field">
-        <label class="label-form" for="patient_id">Nombre del Paciente:</label>
+        <label class="label-form cabecera" for="patient_id">Nombre del Paciente</label>
         <span><?php echo $nombrePaciente; ?></span>
     </div>
 
