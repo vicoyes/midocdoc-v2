@@ -37,6 +37,12 @@ jQuery(document).ready(function($) {
     $('#closeSidebar').on('click', function() {
         closeSidebar();
     });
+
+    let edit = document.querySelectorAll('.edit-medical-button')
+    console.log(edit);
+
+    // carga el elemento que busca el usuario
+    
 });
 
 
@@ -88,4 +94,6 @@ document.querySelector('#close-btn-inform').addEventListener('click', closeSideb
 });
 
 });
+
+
 

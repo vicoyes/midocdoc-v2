@@ -113,7 +113,7 @@ register_activation_hook(__FILE__, 'crear_tablas_personalizadas');
 // Añadir scripts y estilos personalizados
 function mi_custom_tabs_script() {
     $css_files = ['latepoin_inform.css'];
-    $js_files = ['table_new.js', 'sidebar.js'];
+    $js_files = ['table_new.js', 'sidebar.js', 'edit-medical.js'];
 
     foreach ($css_files as $css) {
         wp_enqueue_style('mi-plugin-css-' . $css, plugin_dir_url(__FILE__) . 'css/' . $css);
@@ -138,6 +138,16 @@ function cargar_inform_content() {
 
 add_action('wp_ajax_cargar_inform_content', 'cargar_inform_content');
 add_action('wp_ajax_nopriv_cargar_inform_content', 'cargar_inform_content');
+
+// Cargar formulario de editar informe (AJAX)
+function cargar_edit_medical_content() {
+   $idIform = isset($_GET['idinform']) ? $_GET['idinform'] : 'No se proporcionó ID';
+    include(plugin_dir_path(__FILE__) . 'includes/edit_medical.php');
+    wp_die();
+}
+
+add_action('wp_ajax_cargar_edit_medical_content', 'cargar_edit_medical_content');
+add_action('wp_ajax_nopriv_cargar_edit_medical_content', 'cargar_edit_medical_content');
 
 // Cargar formulario médico (AJAX)
 function cargar_form_medical_content() {

@@ -53,8 +53,7 @@ foreach ($citas_medicas->informes as $informe) {
                    target='_blank'>
                     <i class='latepoint-icon latepoint-icon-paperclip'></i> Descargar
                 </a>
-                <a href="?midocdoc_editar=<?php echo $informe->id; ?>" 
-                   class='button-action'>
+                <a class='button-action edit_form_button'  onclick=' buttonEditForm(<?php echo $informe->id; ?>)'>
                     <i class='latepoint-icon latepoint-icon-edit-3'></i> Editar
                 </a>
             </div>
