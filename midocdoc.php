@@ -260,7 +260,7 @@ add_action('init', 'midocdoc_edit_handler');
 
 // Agregar el endpoint AJAX para actualización
 function manejar_ajax_actualizar_informe() {
-    require_once plugin_dir_path(__FILE__) . 'procces/actualizar-informe.php';
+    require_once plugin_dir_path(__FILE__) . 'formulario-medical-update.php';
     actualizar_informe_medico();
 }
 add_action('wp_ajax_actualizar_informe_medico', 'manejar_ajax_actualizar_informe');
@@ -279,4 +279,49 @@ function registrar_script_edicion() {
         'ajaxurl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('midocdoc_update_report')
     ));
+}
+
+//Medoto para obtener informe médico
+
+function get_informe_medico($idIform) {
+    global $wpdb;
+
+    // Nombre de las tablas
+    $table_informes = $wpdb->prefix . 'midocdoc_informes';
+    $table_citas_medicas = $wpdb->prefix . 'midocdoc_citas_medicas';
+    $table_antecedentes_medicos = $wpdb->prefix . 'midocdoc_antecedentes_medicos';
+    $table_recetas = $wpdb->prefix . 'midocdoc_recetas';
+    $table_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
+
+    // Consulta para obtener la información del informe médico
+    $query_informe = $wpdb->prepare("SELECT * FROM $table_informes WHERE id = %d", $idIform);
+    $informe_medico = $wpdb->get_row($query_informe, ARRAY_A);
+
+    if (!$informe_medico) {
+        return null; // Informe no encontrado
+    }
+
+    // Consulta para obtener la información de citas médicas
+    $query_citas = $wpdb->prepare("SELECT * FROM $table_citas_medicas WHERE id_inform = %d", $idIform);
+    $citas_medicas = $wpdb->get_results($query_citas, ARRAY_A);
+
+    // Consulta para obtener la información de antecedentes médicos
+    $query_antecedentes = $wpdb->prepare("SELECT * FROM $table_antecedentes_medicos WHERE id_inform = %d", $idIform);
+    $antecedentes_medicos = $wpdb->get_results($query_antecedentes, ARRAY_A);
+
+    // Consulta para obtener la información de recetas
+    $query_recetas = $wpdb->prepare("SELECT * FROM $table_recetas WHERE id_inform = %d", $idIform);
+    $recetas = $wpdb->get_results($query_recetas, ARRAY_A);
+
+    // Consulta para obtener la información de medicamentos
+    $query_medicamentos = $wpdb->prepare("SELECT * FROM $table_medicamentos WHERE id_inform = %d", $idIform);
+    $medicamentos = $wpdb->get_results($query_medicamentos, ARRAY_A);
+
+    // Combinar toda la información en un solo array
+    $informe_medico['citas_medicas'] = $citas_medicas;
+    $informe_medico['antecedentes_medicos'] = $antecedentes_medicos;
+    $informe_medico['recetas'] = $recetas;
+    $informe_medico['medicamentos'] = $medicamentos;
+
+    return $informe_medico;
 }

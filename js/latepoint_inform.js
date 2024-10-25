@@ -222,7 +222,7 @@ console.log(customerId);
         let nuevoElemento = document.createElement('a');
         nuevoElemento.textContent = 'Ver Informes';
         let urlBase = window.location.origin;
-        nuevoElemento.href = `${urlBase}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`
+        nuevoElemento.href = `${urlBase}/wp-admin/admin.php?page=latepoint&route_name=customers__index`
         contenedor.insertBefore(nuevoElemento, contenedor.firstChild);
     }
 
@@ -323,7 +323,7 @@ a.innerHTML = "Volver";
 
 // Establecer la URL del elemento 'a'
 var baseUrl = window.location.origin; // Esto obtendrá la parte base de la URL (http://midocdoc.local)
-a.href = baseUrl + "/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form&id=" + customerId;
+a.href = baseUrl + "/wp-admin/admin.php?page=latepoint&route_name=customers__index&id=" + customerId;
 
 // Agregar el elemento 'a' al elemento 'mensajeRespuesta'
 document.getElementById('mensajeRespuesta').appendChild(a);

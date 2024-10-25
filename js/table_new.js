@@ -262,7 +262,7 @@ function agregarMiElemento() {
     if (contenedor) {
         const nuevoElemento = document.createElement('a');
         nuevoElemento.textContent = 'Ver Informes';
-        nuevoElemento.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`;
+        nuevoElemento.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
         contenedor.insertBefore(nuevoElemento, contenedor.firstChild);
     }
 }
@@ -273,15 +273,6 @@ document.querySelectorAll('[data-os-action="bookings__quick_edit"]').forEach(ele
     });
 });
 
-/*document.getElementById('btnAgregar').addEventListener('click', () => {
-    const medicamento = document.getElementById('medicamento');
-    const lista = document.getElementById('listaMedicamentos');
-    const medicamentoSeleccionado = medicamento.options[medicamento.selectedIndex].text;
-
-    const item = document.createElement('div');
-    item.textContent = medicamentoSeleccionado;
-    lista.appendChild(item);
-});*/
 
 function citasmedicasform() {
     const buttonGuardar = document.getElementById('enviar-form-citas-medicas-abajo');
@@ -323,7 +314,7 @@ function citasmedicasform() {
                     const a = document.createElement("a");
                     a.id = "btn-listo";
                     a.innerHTML = "Volver";
-                    a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__edit_form`;
+                    a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
                     document.getElementById('mensajeRespuesta').appendChild(a);
                     document.getElementById('contenedor-botones-guarda').style.display = "none";
                     document.querySelector('span.cerrar').style.display = "none";
@@ -524,7 +515,7 @@ function contador() {
 }
 
 // script para editar los reportes médicos
-document.getElementById('guardar-informe').addEventListener('click', function(e) {
+/*document.getElementById('guardar-informe').addEventListener('click', function(e) {
     e.preventDefault();
     
     // Recolectar datos de todos los formularios
@@ -593,4 +584,4 @@ function mostrarMensaje(mensaje, tipo) {
     mensajeElement.textContent = mensaje;
     mensajeElement.className = `mensaje-${tipo}`;
     mensajeElement.style.display = 'block';
-}
+}*/
