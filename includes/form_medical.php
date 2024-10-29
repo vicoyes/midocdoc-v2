@@ -8,7 +8,7 @@ $id_paciente = isset($_SESSION['id_paciente']) ? $_SESSION['id_paciente'] : null
 $id = $id_paciente;
 
 echo'<div class="tab">
-<button class="tablinks" onclick="openForm(event, \'CitasMedicas\'); citasmedicasform();" id="tabs-citas-medicas">Informe Medico</button>
+<button class="tablinks" onclick="openForm(event, \'CitasMedicas\');" id="tabs-citas-medicas">Informe Medico</button>
 <button class="tablinks" onclick="openForm(event, \'AntecedentesMedicos\')">Antecedentes Médicos</button> 
 <button class="tablinks" onclick="openForm(event, \'Recetas\'); iniciarAgregarMedicamento();">Recetas</button>
 </div>';
@@ -236,7 +236,7 @@ if ($firma_id) {
     </div>
 
     <!-- Botón para agregar medicamento -->
-    <button type="button" id="btnAgregar"><i class="latepoint-icon latepoint-icon-plus-circle"></i> Agregar Medicamento</button>
+    <button type="button" id="btnAgregar" onclick="agregarMedicamento()"><i class="latepoint-icon latepoint-icon-plus-circle" ></i> Agregar Medicamento</button>
 
     <!-- Lista de medicamentos -->
     <div id="listaMedicamentos" class="lista-medicamentos">
@@ -251,16 +251,20 @@ if ($firma_id) {
 
 </div>
 
-<button onclick="mostrarPopup()" id="enviar-form-citas-medicas-abajo"  style="display:none;">Guardar Informe</button>
+<button onclick="mostrarPopup()" id="enviar-form-citas-medicas-abajo"  style="display:block;">Guardar Informe</button>
 
 <div id="miPopup" class="popup">
     <div class="popup-contenido">
         <span class="cerrar" onclick="cerrarPopup()">&times;</span>
-        <p>¿Estás seguro de que deseas guardar el informe médico?</p>
-        <div id="contenedor-botones-guarda">
-        <input type="submit" value="Cancelar"  id="cancelar-informe" onclick="cerrarPopup()">
-        <input type="submit" value="Guardar"  id="guardar-informe" >
-        </div>
+        <p style="text-align: center;">¿Estás seguro de que deseas guardar el informe médico?</p>
         <div id="mensajeRespuesta"></div>
+        <div id="loading" style="display:none;">
+            <div class="spinner-form"></div> 
+            Guardando informe médico...
+        </div>
+        <div id="contenedor-botones-guarda">
+            <input type="button" value="Cancelar" id="cancelar-informe" onclick="cerrarPopup()">
+            <input type="button" value="Guardar" id="guardar-informe" onclick="citasmedicasform()">
+        </div>
     </div>
 </div>

@@ -102,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     // ****** Recetas y Medicamentos *******
-    $id_doctor_recetas = sanitize_text_field($_POST['id_doctor']);
-    $id_paciente_recetas = sanitize_text_field($_POST['id_paciente']);
+    $id_doctor_recetas = isset($_POST['id_doctor']) ? sanitize_text_field($_POST['id_doctor']) : '';
+    $id_paciente_recetas = isset($_POST['id_paciente']) ? sanitize_text_field($_POST['id_paciente']) : '';
     $fecha_receta = sanitize_text_field($_POST['fecha_receta']);
 
     $table_name_recetas = $wpdb->prefix . 'midocdoc_recetas';

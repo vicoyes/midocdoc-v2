@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $current_user = wp_get_current_user();
     $user_id = $current_user->ID;
     $current_date = current_time('mysql');
-    $fechaReceta = $_POST['fecha_receta'];
+    $fechaReceta = sanitize_text_field($_POST['fecha_receta']);
 
     // Actualizar el informe médico
     $table_name = $wpdb->prefix . 'midocdoc_informes';
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'administration_route' => sanitize_text_field($medicamento['vía de administración']),
                         'quantity' => sanitize_text_field($medicamento['cantidad']),
                         'dosage' => sanitize_text_field($medicamento['dosificación']),
-                        'postdated' => $fechaReceta,
+                        'postdated' => $fecha_receta,
                     )
                 );
             }

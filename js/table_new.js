@@ -228,6 +228,9 @@ function firstab() {
 document.body.addEventListener('click', event => {
     if (event.target.classList.contains('ver-detalles')) {
         event.preventDefault();
+        const buttonGuardar = document.getElementById('enviar-form-citas-medicas-abajo');
+        //buttonGuardar.style.display = "block";
+        
         const appointmentId = event.target.getAttribute('data-appointment-id');
         fetch(`${datosAjax.ajaxurl}?action=cargar_form_medical_content&id=${customerId}`)
             .then(response => response.text())
@@ -273,177 +276,191 @@ document.querySelectorAll('[data-os-action="bookings__quick_edit"]').forEach(ele
     });
 });
 
+function iniciarAgregarMedicamento() {
+    // Establecer fecha actual
+      const fechaRecetaInput = document.getElementById('fecha_receta');
+      console.log('Fecha receta:', fechaRecetaInput);
+      const fechaActual = new Date();
+      const fechaFormatted = fechaActual.toISOString().slice(0, 10);
+      fechaRecetaInput.value = fechaFormatted;
+  }
+  
+  
+  
+  function agregarMedicamento() {
+      console.log('Agregando medicamento...');
+      if (!window.medicamentoIdCounter) {
+          window.medicamentoIdCounter = 1;
+      }
+      const idActual = window.medicamentoIdCounter++;
+      const nuevoMedicamento = document.createElement('div');
+      nuevoMedicamento.className = 'medicamento';
+  
+      const ulMedicamento = document.createElement('ul');
+      
+      const propiedades = [
+          'descricion',
+          'presentation', 
+          'concentration',
+          'administration_route',
+          'quantity',
+          'dosage'
+      ];
+  
+      const medicamentoActual = {};
+  
+      const obtenerTextoEnEspanol = propiedad => {
+          const traducciones = {
+              'descricion': 'Descripción',
+              'presentation': 'Presentación',
+              'concentration': 'Concentración',
+              'administration_route': 'Vía de Administración',
+              'quantity': 'Cantidad',
+              'dosage': 'Dosificación'
+          };
+          return traducciones[propiedad] || propiedad;
+      };
+  
+      // Inicializar el array de medicamentos si no existe
+      if (!window.medicamentos) {
+          window.medicamentos = [];
+      }
+  
+      propiedades.forEach(propiedad => {
+          const label = obtenerTextoEnEspanol(propiedad);
+          const input = document.getElementById(propiedad);
+          const valor = input ? input.value : '';
+          
+          medicamentoActual[label.toLowerCase()] = valor;
+  
+          const li = document.createElement('li');
+          li.textContent = `${label}: ${valor}`;
+          li.className = propiedad;
+          ulMedicamento.appendChild(li);
+      });
+  
+      medicamentoActual.id = idActual;
+      window.medicamentos.push(medicamentoActual);
+  
+      const btnEliminar = document.createElement('button');
+      btnEliminar.textContent = 'Eliminar';
+      btnEliminar.classList.add('btn-eliminar');
+      btnEliminar.addEventListener('click', () => {
+          const listaMedicamentos = document.getElementById('listaMedicamentos');
+          console.log('Lista de medicamentos antes de eliminar:', window.medicamentos);
+          listaMedicamentos.removeChild(nuevoMedicamento);
+          window.medicamentos = window.medicamentos.filter(
+              medicamento => medicamento.id !== idActual
+          );
+          console.log('Medicamentos después de eliminar:', window.medicamentos);
+      });
+  
+      nuevoMedicamento.appendChild(ulMedicamento);
+      nuevoMedicamento.appendChild(btnEliminar);
+      const listaMedicamentos = document.getElementById('listaMedicamentos');
+      listaMedicamentos.appendChild(nuevoMedicamento);
+  
+      // Limpiar campos
+      propiedades.forEach(propiedad => {
+          const input = document.getElementById(propiedad);
+          if (input) {
+              input.value = '';
+          }
+      });
+  
+      // Reiniciar contadores
+      const campos = document.querySelectorAll('.campo-recetas');
+      campos.forEach(campo => {
+          campo.value = '';
+          const contador = campo.nextElementSibling;
+          if (contador) {
+              const maxLength = campo.getAttribute('maxlength');
+              contador.textContent = `0/${maxLength}`;
+              contador.classList.remove('bajo');
+          }
+      });
+  }
+  
+
 
 function citasmedicasform() {
-    const buttonGuardar = document.getElementById('enviar-form-citas-medicas-abajo');
-    buttonGuardar.style.display = "block";
+    const buttonGuardar = document.getElementById('guardar-informe');
+    const buttonCancelar = document.getElementById('cancelar-informe');
+    const loadingMessage = document.getElementById('loading');
+    const mensajeRespuesta = document.getElementById('mensajeRespuesta');
 
-    const formularioCitasMedicas = document.getElementById('guardar-informe');
+    // Deshabilitar botones y mostrar feedback visual
+    buttonGuardar.disabled = true;
+    buttonCancelar.disabled = true;
+    buttonGuardar.value = "Guardando...";
+    buttonGuardar.style.backgroundColor = "#ccc"; // Cambiar color de fondo
+    buttonGuardar.style.cursor = "not-allowed"; // Cambiar cursor
+
+    // Mostrar mensaje de carga con spinner
+    loadingMessage.style.display = 'flex';
+    mensajeRespuesta.innerHTML = ''; // Limpiar mensaje de respuesta anterior
+
     const formularioCitasform = document.getElementById('citas-medicas');
     const formularioAntecedentesMedicos = document.getElementById('formulario-antecedentes-medicos');
     const formularioRecetasMedicas = document.getElementById('formReceta');
 
-    formularioCitasMedicas.addEventListener('click', event => {
-        event.preventDefault();
+    const formDataCitasMedicas = new FormData(formularioCitasform);
+    const formDataAntecedentesMedicos = new FormData(formularioAntecedentesMedicos);
+    const formDataRecetasMedicas = new FormData(formularioRecetasMedicas);
+    const fechaReceta = document.getElementById('fecha_receta').value;
 
-        const formDataCitasMedicas = new FormData(formularioCitasform);
-        const formDataAntecedentesMedicos = new FormData(formularioAntecedentesMedicos);
-        const formDataRecetasMedicas = new FormData(formularioRecetasMedicas);
-        const fechaReceta = document.getElementById('fecha_receta').value;
-
-        const formDataCompleto = new FormData();
-        for (const pair of formDataCitasMedicas.entries()) {
-            formDataCompleto.append(pair[0], pair[1]);
-        }
-        for (const pair of formDataAntecedentesMedicos.entries()) {
-            formDataCompleto.append(pair[0], pair[1]);
-        }
-        for (const pair of formDataRecetasMedicas.entries()) {
-            formDataCompleto.append(pair[0], pair[1]);
-        }
-
-        formDataCompleto.append('medicamentos', JSON.stringify(window.medicamentos));
-        formDataCompleto.append('fecha_receta', fechaReceta);
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '../wp-content/plugins/midocdoc/procces/formulario-medical.php', true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    document.getElementById('mensajeRespuesta').innerHTML = xhr.responseText;
-                    const a = document.createElement("a");
-                    a.id = "btn-listo";
-                    a.innerHTML = "Volver";
-                    a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
-                    document.getElementById('mensajeRespuesta').appendChild(a);
-                    document.getElementById('contenedor-botones-guarda').style.display = "none";
-                    document.querySelector('span.cerrar').style.display = "none";
-                } else {
-                    console.error('Error al enviar datos:', xhr.statusText);
-                }
-            }
-        };
-
-        xhr.send(formDataCompleto);
-    });
-}
-
-// Variable global para almacenar el event listener
-let btnAgregarListener;
-
-function iniciarAgregarMedicamento() {
-    const buttonGuardar = document.getElementById('enviar-form-citas-medicas-abajo');
-    buttonGuardar.style.display = "block";
-
-    // Establecer fecha actual
-    const fechaRecetaInput = document.getElementById('fecha_receta');
-    const fechaActual = new Date();
-    const fechaFormatted = fechaActual.toISOString().slice(0, 10);
-    fechaRecetaInput.value = fechaFormatted;
-
-    const btnAgregar = document.getElementById('btnAgregar');
-    const listaMedicamentos = document.getElementById('listaMedicamentos');
-
-    // Remover el listener anterior si existe
-    if (btnAgregarListener) {
-        btnAgregar.removeEventListener('click', btnAgregarListener);
+    const formDataCompleto = new FormData();
+    for (const pair of formDataCitasMedicas.entries()) {
+        formDataCompleto.append(pair[0], pair[1]);
+    }
+    for (const pair of formDataAntecedentesMedicos.entries()) {
+        formDataCompleto.append(pair[0], pair[1]);
+    }
+    for (const pair of formDataRecetasMedicas.entries()) {
+        formDataCompleto.append(pair[0], pair[1]);
+        console.log(pair[0], pair[1]);
     }
 
-    // Inicializar el contador de ID si no existe
-    window.medicamentoIdCounter = window.medicamentoIdCounter || 0;
+    // Verificar el contenido de window.medicamentos antes de enviarlo
+    alert('Medicamentos antes de enviar:', window.medicamentos);
 
-    // Definir el nuevo listener
-    btnAgregarListener = () => {
-        const idActual = window.medicamentoIdCounter++;
-        const nuevoMedicamento = document.createElement('div');
-        nuevoMedicamento.className = 'medicamento';
+    formDataCompleto.append('medicamentos', JSON.stringify(window.medicamentos));
+    formDataCompleto.append('fecha_receta', fechaReceta);
 
-        const ulMedicamento = document.createElement('ul');
-        
-        const propiedades = [
-            'descricion',
-            'presentation', 
-            'concentration',
-            'administration_route',
-            'quantity',
-            'dosage'
-        ];
-
-        const medicamentoActual = {};
-
-        const obtenerTextoEnEspanol = propiedad => {
-            const traducciones = {
-                'descricion': 'Descripción',
-                'presentation': 'Presentación',
-                'concentration': 'Concentración',
-                'administration_route': 'Vía de Administración',
-                'quantity': 'Cantidad',
-                'dosage': 'Dosificación'
-            };
-            return traducciones[propiedad] || propiedad;
-        };
-
-        // Inicializar el array de medicamentos si no existe
-        if (!window.medicamentos) {
-            window.medicamentos = [];
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '../wp-content/plugins/midocdoc/procces/formulario-medical.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            loadingMessage.style.display = 'none'; // Ocultar mensaje de carga
+            buttonGuardar.disabled = false;
+            buttonCancelar.disabled = false;
+            buttonGuardar.value = "Guardar";
+            buttonGuardar.style.backgroundColor = ""; // Restaurar color de fondo
+            buttonGuardar.style.cursor = ""; // Restaurar cursor
+            if (xhr.status === 200) {
+                mensajeRespuesta.innerHTML = xhr.responseText;
+                const a = document.createElement("a");
+                a.id = "btn-listo";
+                a.innerHTML = "Volver";
+                a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
+                mensajeRespuesta.appendChild(a);
+                document.getElementById('contenedor-botones-guarda').style.display = "none";
+                document.querySelector('span.cerrar').style.display = "none";
+            } else {
+                console.error('Error al enviar datos:', xhr.statusText);
+            }
         }
-
-        propiedades.forEach(propiedad => {
-            const label = obtenerTextoEnEspanol(propiedad);
-            const input = document.getElementById(propiedad);
-            const valor = input ? input.value : '';
-            
-            medicamentoActual[label.toLowerCase()] = valor;
-
-            const li = document.createElement('li');
-            li.textContent = `${label}: ${valor}`;
-            li.className = propiedad;
-            ulMedicamento.appendChild(li);
-        });
-
-        medicamentoActual.id = idActual;
-        window.medicamentos.push(medicamentoActual);
-
-        const btnEliminar = document.createElement('button');
-        btnEliminar.textContent = 'Eliminar';
-        //agrega la clase al button crea
-        btnEliminar.classList.add('btn-eliminar');
-        btnEliminar.addEventListener('click', () => {
-            listaMedicamentos.removeChild(nuevoMedicamento);
-            window.medicamentos = window.medicamentos.filter(
-                medicamento => medicamento.id !== idActual
-            );
-            console.log('Medicamentos después de eliminar:', window.medicamentos);
-        });
-
-        nuevoMedicamento.appendChild(ulMedicamento);
-        nuevoMedicamento.appendChild(btnEliminar);
-        listaMedicamentos.appendChild(nuevoMedicamento);
-
-        // Limpiar campos
-        propiedades.forEach(propiedad => {
-            const input = document.getElementById(propiedad);
-            if (input) {
-                input.value = '';
-            }
-        });
-
-        // Reiniciar contadores
-        const campos = document.querySelectorAll('.campo-recetas');
-        campos.forEach(campo => {
-            campo.value = '';
-            const contador = campo.nextElementSibling;
-            if (contador) {
-                const maxLength = campo.getAttribute('maxlength');
-                contador.textContent = `0/${maxLength}`;
-                contador.classList.remove('bajo');
-            }
-        });
     };
 
-    // Agregar el nuevo listener
-    btnAgregar.addEventListener('click', btnAgregarListener);
+    // Verificar el contenido de formDataCompleto antes de enviarlo
+    for (const pair of formDataCompleto.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    xhr.send(formDataCompleto);
 }
+
+
 
 
 function mostrarPopup() {
@@ -477,22 +494,6 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
-/*fetch(plugin_dir_url(__FILE__) + '../procces/send_email.php', {
-    method: 'POST',
-    body: new FormData(document.getElementById('tu-formulario'))
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        showPopup(data.message);
-    } else {
-        showPopup(data.message);
-    }
-})
-.catch(error => {
-    showPopup('Ocurrió un error: ' + error);
-}); */
-
 function contador() {
     const campos = document.querySelectorAll('.campo-con-contador');
     campos.forEach(campo => {
@@ -513,75 +514,3 @@ function contador() {
         };
     });
 }
-
-// script para editar los reportes médicos
-/*document.getElementById('guardar-informe').addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    // Recolectar datos de todos los formularios
-    const formData = new FormData();
-    
-    // Agregar datos del modo de edición si existe
-    const editingMode = document.getElementById('editing_mode');
-    const informeId = document.getElementById('informe_id');
-    
-    if (editingMode && informeId) {
-        formData.append('editing_mode', '1');
-        formData.append('informe_id', informeId.value);
-    }
-    
-    // Agregar todos los campos del formulario de citas médicas
-    const formCitasMedicas = document.getElementById('citas-medicas');
-    new FormData(formCitasMedicas).forEach((value, key) => {
-        formData.append(key, value);
-    });
-    
-    // Agregar todos los campos del formulario de antecedentes
-    const formAntecedentes = document.getElementById('formulario-antecedentes-medicos');
-    new FormData(formAntecedentes).forEach((value, key) => {
-        formData.append(key, value);
-    });
-    
-    // Agregar medicamentos
-    const medicamentos = document.querySelectorAll('.medicamento-item');
-    const medicamentosData = Array.from(medicamentos).map(med => {
-        return {
-            descricion: med.querySelector('[data-field="descricion"]').textContent,
-            presentation: med.querySelector('[data-field="presentation"]').textContent,
-            concentration: med.querySelector('[data-field="concentration"]').textContent,
-            administration_route: med.querySelector('[data-field="administration_route"]').textContent,
-            quantity: med.querySelector('[data-field="quantity"]').textContent,
-            dosage: med.querySelector('[data-field="dosage"]').textContent
-        };
-    });
-    formData.append('medicamentos', JSON.stringify(medicamentosData));
-
-    // Enviar datos al servidor
-    fetch(ajaxurl, {
-        method: 'POST',
-        body: formData,
-        credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            mostrarMensaje('Informe actualizado correctamente', 'success');
-            // Redirigir después de actualizar
-            setTimeout(() => {
-                window.location.href = '?page=midocdoc-informes';
-            }, 2000);
-        } else {
-            mostrarMensaje('Error al actualizar el informe: ' + data.message, 'error');
-        }
-    })
-    .catch(error => {
-        mostrarMensaje('Error al actualizar el informe: ' + error, 'error');
-    });
-});
-
-function mostrarMensaje(mensaje, tipo) {
-    const mensajeElement = document.getElementById('mensajeRespuesta');
-    mensajeElement.textContent = mensaje;
-    mensajeElement.className = `mensaje-${tipo}`;
-    mensajeElement.style.display = 'block';
-}*/

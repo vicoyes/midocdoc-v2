@@ -67,7 +67,10 @@ function openForm(evt, formName) {
         document.getElementById(formName).style.display = "block";
     }
     evt.currentTarget.className += " active";
-    document.getElementById('actualizar-informe').style.display = 'block';
+    const actualizarInformeBtn = document.getElementById('actualizar-informe');
+    if (actualizarInformeBtn) {
+        actualizarInformeBtn.style.display = 'block';
+    }
 }
 
 //funcion para actulizar el registro en la base de datos

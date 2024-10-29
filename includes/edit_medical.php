@@ -255,7 +255,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 
 <input type="submit" value="Guardar" style="display:none;">
 </form>
-</div>
+</div>             
 
 <div id="Recetas" class="tabcontent">
   <div class="formulario-receta">

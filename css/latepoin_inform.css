@@ -327,7 +327,7 @@ button#btnAgregar{
 
 @media (max-width: 768px) {
   .formulario-citas-medicas {
-      width: 90%;
+      width: 100%;
   }
 }
 
@@ -851,87 +851,6 @@ input#id_patient {
 }
 
 
-/* Estilos Responsivos */
-@media (max-width: 768px) {
-  .formulario-antecedentes-medicos .form-row {
-      flex-direction: column;
-  }
-  .formulario-antecedentes-medicos .form-column {
-      padding: 0;
-  }
-
-  #container-para-formulario {
-    flex-direction: column;
- }
-
- #content-midocdoc {
-  width: 100% !important;
-  margin-top: 20px !important;
-
-}
-
-.tab {
-  width: 100%;
-  
-}
-
-.formulario-receta {
-  width: 100%;
-
-}
-
-.midocdoc-category-filter-trigger {
-  font-size: 15px !important;
-  margin-bottom: 25px !important;;
-}
-
-.appointment-card.white-box-content {
-  flex-direction: column;
-}
-
-.appointment-actions {
-  flex-direction: column;
-  display: flex;
-  align-content: flex-start;
-  text-align: left;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-div#firma_medico >img {
-  width: 100%;
-  margin-bottom: 25px;
-}
-
-.formulario-citas-medicas input[type="submit"], .formulario-antecedentes-medicos input[type="submit"], #recetas, button#btnAgregar {
-  width: 100%;
-
-}
-
-.tabcontent {
-  padding: 10px;
-  
-}
-
-
-
-
-.card-2 {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-direction: column;
-}
-
-.appointment-details {
-  width: 100%;
-}
-
-}
-
-
-/* Estilos para sidebar */
 /* Overlay de fondo */
 .sidebar-overlay {
   display: none;
@@ -993,13 +912,7 @@ h2 {
   margin-top: 20px;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  #medicalReportsSidebar {
-      width: 100%;
-      right: -100%;
-  }
-}
+
 
 /* Estilos para el botón de abrir el sidebar  inform*/
      /* Estilo para el overlay */
@@ -1107,6 +1020,7 @@ label.label-form.cabecera {
   align-items: center;
   text-align: center;
   font-size: 16px;
+  flex-direction: column;
 }
 
 .spinner-form {
@@ -1117,9 +1031,111 @@ label.label-form.cabecera {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 50px auto;
+  display: block;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Responsive design */
+@media (max-width: 768px) {
+
+  .sidebar-content {
+    margin-top: 65px;
+  }
+
+  #medicalReportsSidebar {
+      width: 100%;
+      right: -100%;
+   }
+
+  #loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    flex-direction: column;
+  }
+  .formulario-antecedentes-medicos .form-row {
+      flex-direction: column;
+  }
+  .formulario-antecedentes-medicos .form-column {
+      padding: 0;
+  }
+
+  #container-para-formulario {
+    flex-direction: column;
+ }
+
+ #content-midocdoc {
+  width: 100% !important;
+  margin-top: 20px !important;
+
+ }
+
+.tab {
+  width: 100%;
+  
+ }
+
+.formulario-receta {
+  width: 100%;
+
+  }
+
+.midocdoc-category-filter-trigger {
+  font-size: 15px !important;
+  margin-bottom: 25px !important;;
+ }
+
+.appointment-card.white-box-content {
+  flex-direction: column;
+ }
+
+.appointment-actions {
+  flex-direction: column;
+  display: flex;
+  align-content: flex-start;
+  text-align: left;
+  flex-wrap: wrap;
+  gap: 7px;
+ }
+
+div#firma_medico >img {
+  width: 100%;
+  margin-bottom: 25px;
+ }
+
+.formulario-citas-medicas input[type="submit"], .formulario-antecedentes-medicos input[type="submit"], #recetas, button#btnAgregar {
+  width: 100%;
+
+ }
+
+.tabcontent {
+  padding: 10px;
+  
+ }
+
+.card-2 {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-direction: column;
+ }
+
+.appointment-details {
+  width: 100%;
+ }
+
+ #sidebar-form {
+  width: 100%;
+  right: 0 !important;
+  margin-top: 53px;
+}
+
+}
+
