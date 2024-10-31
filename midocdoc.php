@@ -313,15 +313,16 @@ function get_informe_medico($idIform) {
     $query_recetas = $wpdb->prepare("SELECT * FROM $table_recetas WHERE id_inform = %d", $idIform);
     $recetas = $wpdb->get_results($query_recetas, ARRAY_A);
 
-    // Consulta para obtener la información de medicamentos
-    $query_medicamentos = $wpdb->prepare("SELECT * FROM $table_medicamentos WHERE id_inform = %d", $idIform);
-    $medicamentos = $wpdb->get_results($query_medicamentos, ARRAY_A);
+    // Obtener los medicamentos asociados a cada receta
+    foreach ($recetas as &$receta) {
+        $query_medicamentos = $wpdb->prepare("SELECT * FROM $table_medicamentos WHERE id_receta = %d", $receta['id']);
+        $receta['medicamentos'] = $wpdb->get_results($query_medicamentos, ARRAY_A);
+    }
 
     // Combinar toda la información en un solo array
     $informe_medico['citas_medicas'] = $citas_medicas;
     $informe_medico['antecedentes_medicos'] = $antecedentes_medicos;
     $informe_medico['recetas'] = $recetas;
-    $informe_medico['medicamentos'] = $medicamentos;
 
     return $informe_medico;
 }

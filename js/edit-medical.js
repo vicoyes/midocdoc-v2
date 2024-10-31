@@ -1,3 +1,7 @@
+// Arrays globales para almacenar los IDs de los medicamentos eliminados y los nuevos medicamentos agregados
+window.medicamentosEliminados = [];
+window.nuevosMedicamentos = [];
+
 function buttonEditForm(informeId) {
     console.log('buttonEditForm called with informeId:', informeId);
     const ajaxUrl = `${datosAjax.ajaxurl}?action=cargar_edit_medical_content&idinform=${informeId}`;
@@ -40,11 +44,109 @@ function closeSidebarForm() {
 // Cerrar el sidebar cuando se presiona el botón "Cerrar"
 document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
 
-function eliminarMedicamento(idMedicamento) {
+// Función para agregar medicamentos a la receta
+function agregarMedicamentoEdit() {
+    console.log('Agregando medicamento...');
+    if (!window.medicamentoIdCounter) {
+        window.medicamentoIdCounter = 1;
+    }
+    const idActual = 'nuevo_' + window.medicamentoIdCounter++;
+    const nuevoMedicamento = document.createElement('div');
+    nuevoMedicamento.className = 'medicamento';
+    nuevoMedicamento.setAttribute('data-id', idActual);
+
+    const ulMedicamento = document.createElement('ul');
+    
+    const propiedades = [
+        'descricion',
+        'presentation', 
+        'concentration',
+        'administration_route',
+        'quantity',
+        'dosage'
+    ];
+
+    const medicamentoActual = {};
+
+    const obtenerTextoEnEspanol = propiedad => {
+        const traducciones = {
+            'descricion': 'Descripción',
+            'presentation': 'Presentación',
+            'concentration': 'Concentración',
+            'administration_route': 'Vía de Administración',
+            'quantity': 'Cantidad',
+            'dosage': 'Dosificación'
+        };
+        return traducciones[propiedad] || propiedad;
+    };
+
+    // Inicializar el array de medicamentos si no existe
+    if (!window.medicamentos) {
+        window.medicamentos = [];
+    }
+
+    propiedades.forEach(propiedad => {
+        const label = obtenerTextoEnEspanol(propiedad);
+        const input = document.getElementById(propiedad);
+        const valor = input ? input.value : '';
+        
+        medicamentoActual[label.toLowerCase()] = valor;
+
+        const li = document.createElement('li');
+        li.textContent = `${label}: ${valor}`;
+        li.className = propiedad;
+        ulMedicamento.appendChild(li);
+    });
+
+    medicamentoActual.id = idActual;
+    window.medicamentos.push(medicamentoActual);
+    window.nuevosMedicamentos.push(medicamentoActual); // Agregar a nuevos medicamentos
+
+    const btnEliminar = document.createElement('button');
+    btnEliminar.textContent = 'Eliminar';
+    btnEliminar.classList.add('btn-eliminar-edit');
+    btnEliminar.addEventListener('click', (event) => eliminarMedicamentoEdit(event, idActual));
+
+    nuevoMedicamento.appendChild(ulMedicamento);
+    nuevoMedicamento.appendChild(btnEliminar);
+    const listaMedicamentos = document.getElementById('listaMedicamentos');
+    listaMedicamentos.appendChild(nuevoMedicamento);
+
+    // Limpiar campos
+    propiedades.forEach(propiedad => {
+        const input = document.getElementById(propiedad);
+        if (input) {
+            input.value = '';
+        }
+    });
+
+    // Reiniciar contadores
+    const campos = document.querySelectorAll('.campo-recetas');
+    campos.forEach(campo => {
+        campo.value = '';
+        const contador = campo.nextElementSibling;
+        if (contador) {
+            const maxLength = campo.getAttribute('maxlength');
+            contador.textContent = `0/${maxLength}`;
+            contador.classList.remove('bajo');
+        }
+    });
+}
+
+// Función para eliminar medicamentos de la receta
+function eliminarMedicamentoEdit(e,idMedicamento) {
+   e.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+   e.stopPropagation(); // Detener la propagación del evento
+   console.log(e);
+
     const medicamentoDiv = document.querySelector(`.medicamento[data-id="${idMedicamento}"]`);
     if (medicamentoDiv) {
         medicamentoDiv.remove();
-        // Aquí puedes agregar lógica adicional para eliminar el medicamento del array global si es necesario
+        // Eliminar el medicamento del array global
+        window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idMedicamento);
+        if (!idMedicamento.startsWith('nuevo_')) {
+            window.medicamentosEliminados.push(idMedicamento); // Agregar a medicamentos eliminados si no es un nuevo medicamento
+        }
         console.log(`Medicamento con ID ${idMedicamento} eliminado.`);
     }
 }
@@ -76,6 +178,7 @@ function openForm(evt, formName) {
 //funcion para actulizar el registro en la base de datos
 
 function actualizarCitasMedicasForm() {
+   console.log('Medicamentos:', window.medicamentos);
     const buttonActualizar = document.getElementById('actualizar-informe');
     const buttonCancelar = document.getElementById('cancelar-informe');
     const loadingMessage = document.getElementById('loading');

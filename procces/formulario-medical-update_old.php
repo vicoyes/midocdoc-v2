@@ -125,43 +125,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo '<div id="Respuestas-servidor"><b>La información del paciente se actualizó correctamente.</b></div>';
     }
 
-    // Manejo de medicamentos eliminados
-    if (isset($_POST['medicamentos_eliminados'])) {
-        $medicamentos_eliminados = json_decode(stripslashes($_POST['medicamentos_eliminados']), true);
-        if ($medicamentos_eliminados !== null && json_last_error() === JSON_ERROR_NONE) {
-            $table_name_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
-            foreach ($medicamentos_eliminados as $id_medicamento) {
-                $wpdb->delete($table_name_medicamentos, array('id' => $id_medicamento));
-            }
-        } else {
-            echo "Error al decodificar los medicamentos eliminados: " . json_last_error_msg();
-        }
-    }
+    if (isset($_POST['medicamentos'])) {
+        $medicamentos = json_decode(stripslashes($_POST['medicamentos']), true);
 
-    // Manejo de nuevos medicamentos
-    if (isset($_POST['nuevos_medicamentos'])) {
-        $nuevos_medicamentos = json_decode(stripslashes($_POST['nuevos_medicamentos']), true);
-        if ($nuevos_medicamentos !== null && json_last_error() === JSON_ERROR_NONE) {
+        if ($medicamentos === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo "Error al decodificar los medicamentos: " . json_last_error_msg();
+        } else {
             $table_name_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
-            foreach ($nuevos_medicamentos as $medicamento) {
+            // Primero, eliminar los medicamentos existentes para este informe
+            $wpdb->delete($table_name_medicamentos, array('id_receta' => $registro_id));
+
+            // Luego, insertar los nuevos medicamentos
+            foreach ($medicamentos as $medicamento) {
                 $wpdb->insert(
                     $table_name_medicamentos,
                     array(
                         'id_receta' => $registro_id,
-                        'descricion' => sanitize_text_field($medicamento['descricion']),
-                        'presentation' => sanitize_text_field($medicamento['presentation']),
-                        'concentration' => sanitize_text_field($medicamento['concentration']),
-                        'administration_route' => sanitize_text_field($medicamento['administration_route']),
-                        'quantity' => sanitize_text_field($medicamento['quantity']),
-                        'dosage' => sanitize_text_field($medicamento['dosage']),
+                        'descricion' => sanitize_text_field($medicamento['descripción']),
+                        'presentation' => sanitize_text_field($medicamento['presentación']),
+                        'concentration' => sanitize_text_field($medicamento['concentración']),
+                        'administration_route' => sanitize_text_field($medicamento['vía de administración']),
+                        'quantity' => sanitize_text_field($medicamento['cantidad']),
+                        'dosage' => sanitize_text_field($medicamento['dosificación']),
                         'postdated' => $fecha_receta,
                     )
                 );
             }
-        } else {
-            echo "Error al decodificar los nuevos medicamentos: " . json_last_error_msg();
         }
     } else {
-        echo "No se recibieron nuevos medicamentos";
+        echo "No se recibieron medicamentos";
     }
 }
+?>

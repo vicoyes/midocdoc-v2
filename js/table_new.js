@@ -384,6 +384,7 @@ function iniciarAgregarMedicamento() {
 
 
 function citasmedicasform() {
+    //console.log('Medicamentos antes de enviar:', JSON.stringify(window.medicamentos));
     const buttonGuardar = document.getElementById('guardar-informe');
     const buttonCancelar = document.getElementById('cancelar-informe');
     const loadingMessage = document.getElementById('loading');
@@ -422,7 +423,7 @@ function citasmedicasform() {
     }
 
     // Verificar el contenido de window.medicamentos antes de enviarlo
-    alert('Medicamentos antes de enviar:', window.medicamentos);
+    console.log('Medicamentos antes de enviar:', JSON.stringify(window.medicamentos));
 
     formDataCompleto.append('medicamentos', JSON.stringify(window.medicamentos));
     formDataCompleto.append('fecha_receta', fechaReceta);

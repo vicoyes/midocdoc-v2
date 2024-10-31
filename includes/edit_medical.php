@@ -71,8 +71,8 @@ if ($informe_medico) {
     $id_inform_receta = $recetas['id_inform']; // 11
     $fecha_receta = $recetas['fecha_receta']; // 0000-00-00 00:00:00
 
-    // Variables para el array 'medicamentos' (que está vacío en este caso)
-    $medicamentos = !empty($informe_medico['medicamentos']) ? $informe_medico['medicamentos'] : [];
+   // Variables para el array 'medicamentos'
+   $medicamentos = !empty($recetas['medicamentos']) ? $recetas['medicamentos'] : [];
 
 } else {
     echo 'Informe no encontrado';
@@ -302,13 +302,14 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
     </div>
 
     <!-- Botón para agregar medicamento -->
-    <button type="button" id="btnAgregar"><i class="latepoint-icon latepoint-icon-plus-circle"></i> Agregar Medicamento</button>
+    <button type="button" id="btnAgregar" onclick="agregarMedicamentoEdit()"><i class="latepoint-icon latepoint-icon-plus-circle"></i> Agregar Medicamento</button>
 
 <!-- Lista de medicamentos -->
 <div id="listaMedicamentos" class="lista-medicamentos">
+<?php echo '<pre>' . print_r($medicamentos, true) . '</pre>'; ?>
     <?php if (!empty($medicamentos)): ?>
         <?php foreach ($medicamentos as $medicamento): ?>
-            <div class="medicamento">
+            <div class="medicamento" data-id="<?php echo $medicamento['id_medicamento']; ?>">
                 <ul>
                     <li>Descripción: <?php echo htmlspecialchars($medicamento['descricion']); ?></li>
                     <li>Presentación: <?php echo htmlspecialchars($medicamento['presentation']); ?></li>
@@ -317,7 +318,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
                     <li>Cantidad: <?php echo htmlspecialchars($medicamento['quantity']); ?></li>
                     <li>Dosificación: <?php echo htmlspecialchars($medicamento['dosage']); ?></li>
                 </ul>
-                <button class="btn-eliminar" onclick="eliminarMedicamento(<?php echo $medicamento['id_medicamento']; ?>)">Eliminar</button>
+                <button class="btn-eliminar-edit" onclick="eliminarMedicamentoEdit(event, <?php echo $medicamento['id_medicamento']; ?>)">Eliminar</button>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
@@ -333,7 +334,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 
 </div>
 
-<button onclick="mostrarPopup()" id="enviar-form-citas-medicas-abajo" style="display:none;">Actualizar Informe</button>
+<button onclick="mostrarPopup()" id="enviar-form-citas-medicas-abajo" style="display:block;">Actualizar Informe</button>
 
 <div id="miPopup" class="popup">
     <div class="popup-contenido">

@@ -609,7 +609,7 @@ body.latepoint-admin .latepoint-btn.latepoint-btn-outline.latepoint-btn-grey, bo
   align-items: flex-start;
 }
 
-.btn-eliminar {
+.btn-eliminar, .btn-eliminar-edit {
   border: none;
   background: none;
   color: #2c408c;
