@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Obtener el ID del registro que se va a actualizar
     $registro_id = sanitize_text_field($_POST['registro_id']);
+    $id_receta = sanitize_text_field($_POST['id_receta']); // Obtener el ID de la receta
 
     // ****** Citas Medicas *******
     $purpose_consult = sanitize_text_field($_POST['purpose_consult']);
@@ -131,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($medicamentos_eliminados !== null && json_last_error() === JSON_ERROR_NONE) {
             $table_name_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
             foreach ($medicamentos_eliminados as $id_medicamento) {
-                $wpdb->delete($table_name_medicamentos, array('id' => $id_medicamento));
+                $wpdb->delete($table_name_medicamentos, array('id_medicamento' => $id_medicamento));
             }
         } else {
             echo "Error al decodificar los medicamentos eliminados: " . json_last_error_msg();
@@ -144,19 +145,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($nuevos_medicamentos !== null && json_last_error() === JSON_ERROR_NONE) {
             $table_name_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
             foreach ($nuevos_medicamentos as $medicamento) {
-                $wpdb->insert(
-                    $table_name_medicamentos,
-                    array(
-                        'id_receta' => $registro_id,
-                        'descricion' => sanitize_text_field($medicamento['descricion']),
-                        'presentation' => sanitize_text_field($medicamento['presentation']),
-                        'concentration' => sanitize_text_field($medicamento['concentration']),
-                        'administration_route' => sanitize_text_field($medicamento['administration_route']),
-                        'quantity' => sanitize_text_field($medicamento['quantity']),
-                        'dosage' => sanitize_text_field($medicamento['dosage']),
-                        'postdated' => $fecha_receta,
-                    )
-                );
+                // Verificar la existencia de las claves en el array
+                $descricion = isset($medicamento['descricion']) ? sanitize_text_field($medicamento['descricion']) : '';
+                $presentation = isset($medicamento['presentation']) ? sanitize_text_field($medicamento['presentation']) : '';
+                $concentration = isset($medicamento['concentration']) ? sanitize_text_field($medicamento['concentration']) : '';
+                $administration_route = isset($medicamento['administration_route']) ? sanitize_text_field($medicamento['administration_route']) : '';
+                $quantity = isset($medicamento['quantity']) ? sanitize_text_field($medicamento['quantity']) : '';
+                $dosage = isset($medicamento['dosage']) ? sanitize_text_field($medicamento['dosage']) : '';
+
+                // Verificar que id_receta existe en la tabla wp_midocdoc_recetas
+                $receta_exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name_recetas WHERE id = %d", $id_receta));
+                if ($receta_exists) {
+                    $wpdb->insert(
+                        $table_name_medicamentos,
+                        array(
+                            'id_receta' => $id_receta,
+                            'descricion' => $descricion,
+                            'presentation' => $presentation,
+                            'concentration' => $concentration,
+                            'administration_route' => $administration_route,
+                            'quantity' => $quantity,
+                            'dosage' => $dosage,
+                            'postdated' => $fecha_receta,
+                            'id_inform' => $registro_id, // Asegúrate de que id_inform se está enviando correctamente
+                            'requires_disability' => 0 // Ajusta según sea necesario
+                        )
+                    );
+                } else {
+                    echo "Error: La receta con ID $id_receta no existe.";
+                }
             }
         } else {
             echo "Error al decodificar los nuevos medicamentos: " . json_last_error_msg();

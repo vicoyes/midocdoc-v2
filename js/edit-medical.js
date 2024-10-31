@@ -44,6 +44,24 @@ function closeSidebarForm() {
 // Cerrar el sidebar cuando se presiona el botón "Cerrar"
 document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
 
+// Función para eliminar medicamentos de la receta
+function eliminarMedicamentoEdit(event, idMedicamento) {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+    event.stopPropagation(); // Detener la propagación del evento
+
+    alert(`Eliminar medicamento con ID ${idMedicamento}`);
+    const medicamentoDiv = document.querySelector(`.medicamento[data-id="${idMedicamento}"]`);
+    if (medicamentoDiv) {
+        medicamentoDiv.remove();
+        // Eliminar el medicamento del array global
+        window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idMedicamento);
+        if (!idMedicamento.startsWith('nuevo_')) {
+            window.medicamentosEliminados.push(idMedicamento); // Agregar a medicamentos eliminados si no es un nuevo medicamento
+        }
+        console.log(`Medicamento con ID ${idMedicamento} eliminado.`);
+    }
+}
+
 // Función para agregar medicamentos a la receta
 function agregarMedicamentoEdit() {
     console.log('Agregando medicamento...');
@@ -87,10 +105,10 @@ function agregarMedicamentoEdit() {
 
     propiedades.forEach(propiedad => {
         const label = obtenerTextoEnEspanol(propiedad);
-        const input = document.getElementById(propiedad);
+        const input = document.querySelector(`input[name="${propiedad}[]"]`);
         const valor = input ? input.value : '';
         
-        medicamentoActual[label.toLowerCase()] = valor;
+        medicamentoActual[propiedad] = valor;
 
         const li = document.createElement('li');
         li.textContent = `${label}: ${valor}`;
@@ -104,7 +122,7 @@ function agregarMedicamentoEdit() {
 
     const btnEliminar = document.createElement('button');
     btnEliminar.textContent = 'Eliminar';
-    btnEliminar.classList.add('btn-eliminar-edit');
+    btnEliminar.classList.add('btn-eliminar');
     btnEliminar.addEventListener('click', (event) => eliminarMedicamentoEdit(event, idActual));
 
     nuevoMedicamento.appendChild(ulMedicamento);
@@ -114,7 +132,7 @@ function agregarMedicamentoEdit() {
 
     // Limpiar campos
     propiedades.forEach(propiedad => {
-        const input = document.getElementById(propiedad);
+        const input = document.querySelector(`input[name="${propiedad}[]"]`);
         if (input) {
             input.value = '';
         }
@@ -131,24 +149,6 @@ function agregarMedicamentoEdit() {
             contador.classList.remove('bajo');
         }
     });
-}
-
-// Función para eliminar medicamentos de la receta
-function eliminarMedicamentoEdit(e,idMedicamento) {
-   e.preventDefault(); // Prevenir el comportamiento predeterminado del evento
-   e.stopPropagation(); // Detener la propagación del evento
-   console.log(e);
-
-    const medicamentoDiv = document.querySelector(`.medicamento[data-id="${idMedicamento}"]`);
-    if (medicamentoDiv) {
-        medicamentoDiv.remove();
-        // Eliminar el medicamento del array global
-        window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idMedicamento);
-        if (!idMedicamento.startsWith('nuevo_')) {
-            window.medicamentosEliminados.push(idMedicamento); // Agregar a medicamentos eliminados si no es un nuevo medicamento
-        }
-        console.log(`Medicamento con ID ${idMedicamento} eliminado.`);
-    }
 }
 
 // funcion para mostra el elemento el boton
@@ -175,10 +175,11 @@ function openForm(evt, formName) {
     }
 }
 
-//funcion para actulizar el registro en la base de datos
-
+// Función para actualizar el formulario de citas médicas
 function actualizarCitasMedicasForm() {
-   console.log('Medicamentos:', window.medicamentos);
+    console.log('Medicamentos:', window.medicamentos);
+    console.log('Nuevos Medicamentos:', window.nuevosMedicamentos); // Agregar un log para verificar
+
     const buttonActualizar = document.getElementById('actualizar-informe');
     const buttonCancelar = document.getElementById('cancelar-informe');
     const loadingMessage = document.getElementById('loading');
@@ -221,6 +222,14 @@ function actualizarCitasMedicasForm() {
     // Añadir el ID del registro que se va a actualizar
     const registroId = document.getElementById('registro_id').value;
     formDataCompleto.append('registro_id', registroId);
+
+    // Obtener el ID de la receta desde el atributo data-id-receta
+    const recetaId = document.getElementById('listaMedicamentos').getAttribute('data-id-receta');
+    formDataCompleto.append('id_receta', recetaId);
+
+    // Agregar medicamentos eliminados y nuevos medicamentos al formData
+    formDataCompleto.append('medicamentos_eliminados', JSON.stringify(window.medicamentosEliminados));
+    formDataCompleto.append('nuevos_medicamentos', JSON.stringify(window.nuevosMedicamentos));
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '../wp-content/plugins/midocdoc/procces/formulario-medical-update.php', true);

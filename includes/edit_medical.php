@@ -305,7 +305,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
     <button type="button" id="btnAgregar" onclick="agregarMedicamentoEdit()"><i class="latepoint-icon latepoint-icon-plus-circle"></i> Agregar Medicamento</button>
 
 <!-- Lista de medicamentos -->
-<div id="listaMedicamentos" class="lista-medicamentos">
+<div id="listaMedicamentos" class="lista-medicamentos" data-id-receta="<?php echo htmlspecialchars($receta_id) ?>">
 <?php echo '<pre>' . print_r($medicamentos, true) . '</pre>'; ?>
     <?php if (!empty($medicamentos)): ?>
         <?php foreach ($medicamentos as $medicamento): ?>
