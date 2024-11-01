@@ -7,11 +7,6 @@ $idIform = isset($_GET['idinform']) ? $_GET['idinform'] : 'No se proporcionó ID
 $informe_medico = get_informe_medico($idIform);
 
 if ($informe_medico) {
-    // Mostrar el informe médico en un formato legible
-    echo '<pre>';
-    print_r($informe_medico);
-    echo '</pre>';
-
     // Variables para el array principal
     $id = $informe_medico['id']; // 11
     $report_date = $informe_medico['report_date']; // 2024-01-15 20:11:58
@@ -80,8 +75,8 @@ if ($informe_medico) {
 
 
 echo'<div class="tab">
-<button class="tablinks" onclick="openForm(event, \'CitasMedicas\'); citasmedicasform();" id="tabs-citas-medicas">Informe Medico</button>
-<button class="tablinks" onclick="openForm(event, \'AntecedentesMedicos\')">Antecedentes Médicos</button> 
+<button class="tablinks" onclick="openForm(event, \'AntecedentesMedicos\')" id="tabs-citas-medicas">Antecedentes Médicos</button> 
+<button class="tablinks" onclick="openForm(event, \'CitasMedicas\'); citasmedicasform();" >Informe Medico</button>
 <button class="tablinks" onclick="openForm(event, \'Recetas\'); iniciarAgregarMedicamento();">Recetas</button>
 </div>';
 
@@ -100,12 +95,11 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 ?>
 
 <div id="content-midocdoc">
-<span><?php echo htmlspecialchars($informe_medico['report_date'])?></span>
 <div class="formulario-citas-medicas-info">
 
     <div class="info-field">
-        <label class="label-form cabecera" for="id_inform">ID Informe</label>
-        <span id="id_inform"><?php echo htmlspecialchars($idIform); ?></span>
+        <label class="label-form cabecera" for="id_inform">Numero de Informe</label>
+        <span id="id_inform">#<?php echo htmlspecialchars($idIform); ?></span>
     </div>
 
     <div class="info-field">
@@ -114,8 +108,8 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
     </div>
 
     <div class="info-field">
-        <label class="label-form cabecera" for="patient_id">ID del Paciente</label>
-        <span id="patient_id"><?php echo htmlspecialchars($informe_medico['id_patient']); ?></span>
+        <label class="label-form cabecera" for="patient_id">Fecha del Informe</label>
+        <span><?php echo htmlspecialchars($informe_medico['report_date'])?></span>
     </div>
     
     <div class="info-field">
@@ -306,7 +300,6 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 
 <!-- Lista de medicamentos -->
 <div id="listaMedicamentos" class="lista-medicamentos" data-id-receta="<?php echo htmlspecialchars($receta_id) ?>">
-<?php echo '<pre>' . print_r($medicamentos, true) . '</pre>'; ?>
     <?php if (!empty($medicamentos)): ?>
         <?php foreach ($medicamentos as $medicamento): ?>
             <div class="medicamento" data-id="<?php echo $medicamento['id_medicamento']; ?>">

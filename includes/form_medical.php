@@ -8,8 +8,8 @@ $id_paciente = isset($_SESSION['id_paciente']) ? $_SESSION['id_paciente'] : null
 $id = $id_paciente;
 
 echo'<div class="tab">
-<button class="tablinks" onclick="openForm(event, \'CitasMedicas\');" id="tabs-citas-medicas">Informe Medico</button>
-<button class="tablinks" onclick="openForm(event, \'AntecedentesMedicos\')">Antecedentes Médicos</button> 
+<button class="tablinks" onclick="openForm(event, \'AntecedentesMedicos\')" id="tabs-citas-medicas">Antecedentes Médicos</button> 
+<button class="tablinks" onclick="openForm(event, \'CitasMedicas\');">Informe Medico</button>
 <button class="tablinks" onclick="openForm(event, \'Recetas\'); iniciarAgregarMedicamento();">Recetas</button>
 </div>';
 
@@ -34,7 +34,7 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
 <div class="formulario-citas-medicas-info">
 
     <div class="info-field">
-        <label class="label-form cabecera" for="id_inform">ID Informe</label>
+        <label class="label-form cabecera" for="id_inform">Numero de Informe</label>
         <span id="id_inform">No Generado</span>
     </div>
 
@@ -44,8 +44,8 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
     </div>
 
     <div class="info-field">
-        <label class="label-form cabecera" for="patient_id">ID del Paciente</label>
-        <span id="patient_id"><?php echo $id; ?></span>
+        <label class="label-form cabecera" for="patient_id">Fecha del informe</label>
+    <span id="fecha_informe"><?php echo date('Y-m-d'); ?></span>
     </div>
     
     <div class="info-field">
@@ -64,24 +64,24 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
   <h2 class="form-title">Información General de la Consulta</h2>
 
 
-    <label class="label-form" for="purpose_consult">Objetivos de la Consulta:</label>
+    <label class="label-form" for="purpose_consult">Motivo de la Consulta:</label>
     <input type="text" id="purpose_consult" class="campo-con-contador os-form-control" name="purpose_consult" maxlength="255"><br><br>
 
-    <label class="label-form" for="external_cause">Causa Externa:</label>
+    <label class="label-form" for="external_cause">Descripción detallada de los síntomas:</label>
     <input type="text" id="external_cause" class="campo-con-contador os-form-control" name="external_cause" maxlength="255" ><br><br>
 
-    <label class="label-form" for="reason_consult">Razón de la Consulta:</label>
+    <label class="label-form" for="reason_consult">Tratamientos previos:</label>
     <textarea id="reason_consult" name="reason_consult" class="os-form-control"></textarea><br><br>
 
      <h2 class="form-title">Evaluación del Paciente</h2>
-    <label class="label-form" for="current_condition">Condición Actual:</label>
+    <label class="label-form" for="current_condition">Diagnóstico Presuntivo:</label>
     <textarea id="current_condition" name="current_condition" class="os-form-control"></textarea><br><br>
 
-    <label class="label-form" for="systems_review">Revisión de Sistemas:</label>
+    <label class="label-form" for="systems_review">Plan de Estudios y Tratamiento:</label>
     <textarea id="systems_review" name="systems_review" class="os-form-control"></textarea><br><br>
 
-    <label class="label-form" for="general_state">Estado General:</label>
-    <input type="text" id="general_state" class="campo-con-contador os-form-control" name="general_state" maxlength="255"><br><br>
+    <label class="label-form" for="general_state" style="display:none;">Estado General:</label>
+    <input style="display:none;" type="text" id="general_state" class="campo-con-contador os-form-control" name="general_state" maxlength="255"><br><br>
 
     <label class="label-form" for="consciousness_state">Estado de Conciencia:</label>
     <input type="text" id="consciousness_state" class="campo-con-contador os-form-control" name="consciousness_state" maxlength="255"><br><br>

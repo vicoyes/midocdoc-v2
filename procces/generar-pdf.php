@@ -159,22 +159,22 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
                             <td><?php echo $cita->purpose_consult; ?></td>
                         </tr>
                         <tr>
-                            <td>Causa Externa:</td>
+                            <td>Descripción detallada de los síntomas:</td>
                             <td><?php echo $cita->external_cause; ?></td>
                         </tr>
                         <tr>
-                            <td>Razón de la Consulta:</td>
+                            <td>Tratamientos previos:</td>
                             <td><?php echo $cita->reason_consult; ?></td>
                         </tr>
                         <tr>
-                            <td>Condición Actual:</td>
+                            <td>Diagnóstico Presuntivo:</td>
                             <td><?php echo $cita->current_condition; ?></td>
                         </tr>
                         <tr>
-                            <td>Revisión de Sistemas:</td>
+                            <td>Plan de Estudios y Tratamiento:</td>
                             <td><?php echo $cita->systems_review; ?></td>
                         </tr>
-                        <tr>
+                        <tr style="display:none;">
                             <td>Estado General:</td>
                             <td><?php echo $cita->general_state; ?></td>
                         </tr>

@@ -2,7 +2,10 @@
 window.medicamentosEliminados = [];
 window.nuevosMedicamentos = [];
 
-function buttonEditForm(informeId) {
+function buttonEditForm(event, informeId) {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+    event.stopPropagation(); // Detener la propagación del evento
+    
     console.log('buttonEditForm called with informeId:', informeId);
     const ajaxUrl = `${datosAjax.ajaxurl}?action=cargar_edit_medical_content&idinform=${informeId}`;
     console.log('AJAX URL:', ajaxUrl);
@@ -49,16 +52,20 @@ function eliminarMedicamentoEdit(event, idMedicamento) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
     event.stopPropagation(); // Detener la propagación del evento
 
-    alert(`Eliminar medicamento con ID ${idMedicamento}`);
-    const medicamentoDiv = document.querySelector(`.medicamento[data-id="${idMedicamento}"]`);
-    if (medicamentoDiv) {
-        medicamentoDiv.remove();
-        // Eliminar el medicamento del array global
-        window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idMedicamento);
-        if (!idMedicamento.startsWith('nuevo_')) {
-            window.medicamentosEliminados.push(idMedicamento); // Agregar a medicamentos eliminados si no es un nuevo medicamento
+    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el medicamento?`);
+    if (confirmacion) {
+        const medicamentoDiv = document.querySelector(`.medicamento[data-id="${idMedicamento}"]`);
+        if (medicamentoDiv) {
+            medicamentoDiv.remove();
+            // Eliminar el medicamento del array global
+            window.medicamentos = window.medicamentos.filter(medicamento => medicamento.id !== idMedicamento);
+            if (!String(idMedicamento).startsWith('nuevo_')) {
+                window.medicamentosEliminados.push(idMedicamento); // Agregar a medicamentos eliminados si no es un nuevo medicamento
+            }
+            console.log(`Medicamento con ID ${idMedicamento} eliminado.`);
         }
-        console.log(`Medicamento con ID ${idMedicamento} eliminado.`);
+    } else {
+        console.log(`Eliminación del medicamento con ID ${idMedicamento} cancelada.`);
     }
 }
 
@@ -179,6 +186,7 @@ function openForm(evt, formName) {
 function actualizarCitasMedicasForm() {
     console.log('Medicamentos:', window.medicamentos);
     console.log('Nuevos Medicamentos:', window.nuevosMedicamentos); // Agregar un log para verificar
+    console.log('Medicamentos Eliminados:', window.medicamentosEliminados); // Agregar un log para verificar
 
     const buttonActualizar = document.getElementById('actualizar-informe');
     const buttonCancelar = document.getElementById('cancelar-informe');

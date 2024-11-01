@@ -463,7 +463,6 @@ function citasmedicasform() {
 
 
 
-
 function mostrarPopup() {
     const popup = document.getElementById('miPopup');
     popup.classList.add('mostrado');
