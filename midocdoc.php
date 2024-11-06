@@ -15,7 +15,7 @@ require_once plugin_dir_path(__FILE__) . 'model/modelmidocdoc.php';
 
 // Crear tablas personalizadas
 function crear_tablas_personalizadas() {
-    ob_start(); 
+    ob_start(); // Iniciar el buffer de salida
 
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
@@ -37,7 +37,7 @@ function crear_tablas_personalizadas() {
             'diagnosis' => 'text NOT NULL',
             'management_plan' => 'text NOT NULL',
             'notes' => 'text NOT NULL',
-            'appointment_date' => "datetime DEFAULT '0000-00-00 00:00:00' NOT NULL",
+            'appointment_date' => "datetime NOT NULL",
             'responsible' => 'varchar(255) NOT NULL',
             'specialty' => 'varchar(255) NOT NULL',
             'patient_id' => 'int NOT NULL',
@@ -45,7 +45,7 @@ function crear_tablas_personalizadas() {
             'id_inform' => 'int NOT NULL',
             'id_doctor' => 'int NOT NULL',
             'id_patient' => 'int NOT NULL',
-            'PRIMARY KEY' => '(id)'
+            'PRIMARY KEY' => 'id'
         ],
         'midocdoc_antecedentes_medicos' => [
             'id' => 'int NOT NULL AUTO_INCREMENT',
@@ -65,7 +65,7 @@ function crear_tablas_personalizadas() {
             'genero' => 'varchar(50)',
             'fuma' => 'tinyint(1)',
             'numero_hijos' => 'smallint(5)',
-            'PRIMARY KEY' => '(id)'
+            'PRIMARY KEY' => 'id'
         ],
         'midocdoc_recetas' => [
             'id' => 'int NOT NULL AUTO_INCREMENT',
@@ -73,7 +73,7 @@ function crear_tablas_personalizadas() {
             'id_paciente' => 'int NOT NULL',
             'id_inform' => 'int NOT NULL',
             'fecha_receta' => 'datetime NOT NULL',
-            'PRIMARY KEY' => '(id)'
+            'PRIMARY KEY' => 'id'
         ],
         'midocdoc_medicamentos' => [
             'id_medicamento' => 'int NOT NULL AUTO_INCREMENT',
@@ -85,30 +85,31 @@ function crear_tablas_personalizadas() {
             'quantity' => 'int NOT NULL',
             'dosage' => 'varchar(255) NOT NULL',
             'id_inform' => 'int NOT NULL',
-            'postdated' => "datetime DEFAULT '0000-00-00 00:00:00' NOT NULL",
+            'postdated' => "datetime NOT NULL",
             'requires_disability' => 'tinyint(1) NOT NULL',
-            'PRIMARY KEY' => '(id_medicamento)',
+            'PRIMARY KEY' => 'id_medicamento',
             'FOREIGN KEY' => '(id_receta) REFERENCES ' . $wpdb->prefix . 'midocdoc_recetas(id)'
         ],
         'midocdoc_informes' => [
             'id' => 'int NOT NULL AUTO_INCREMENT',
-            'report_date' => "datetime DEFAULT '0000-00-00 00:00:00' NOT NULL",
+            'report_date' => "datetime NOT NULL",
             'id_doctor' => 'int NOT NULL',
             'id_patient' => 'int NOT NULL',
-            'PRIMARY KEY' => '(id)'
+            'PRIMARY KEY' => 'id'
         ]
     ];
 
     foreach ($tables as $table_name => $columns) {
         $table_name = $wpdb->prefix . $table_name;
-        $sql = "CREATE TABLE $table_name (";
+        $columns_sql = [];
         foreach ($columns as $column => $definition) {
-            $sql .= "$column $definition,";
+            $columns_sql[] = "$column $definition";
         }
-        $sql = rtrim($sql, ',') . ") $charset_collate;";
+        $sql = "CREATE TABLE $table_name (" . implode(', ', $columns_sql) . ") $charset_collate;";
         dbDelta($sql);
     }
-    ob_end_clean();
+
+    ob_end_clean(); // Limpiar el buffer de salida
 }
 
 register_activation_hook(__FILE__, 'crear_tablas_personalizadas');
@@ -164,8 +165,21 @@ add_action('wp_ajax_nopriv_cargar_form_medical_content', 'cargar_form_medical_co
 
 // Agregar sidebar y scripts
 function agregar_sidebar_y_scripts() {
-    include plugin_dir_path(__FILE__) . 'includes/sidebar-medical-reports.php';
-    include plugin_dir_path(__FILE__) . 'includes/sidebar-inform.php';
+    // Verificar si los archivos existen antes de incluirlos
+    $sidebar_medical_reports_path = plugin_dir_path(__FILE__) . 'includes/sidebar-medical-reports.php';
+    $sidebar_inform_path = plugin_dir_path(__FILE__) . 'includes/sidebar-inform.php';
+
+    if (file_exists($sidebar_medical_reports_path)) {
+        include $sidebar_medical_reports_path;
+    } else {
+        error_log("El archivo sidebar-medical-reports.php no existe.");
+    }
+
+    if (file_exists($sidebar_inform_path)) {
+        include $sidebar_inform_path;
+    } else {
+        error_log("El archivo sidebar-inform.php no existe.");
+    }
 }
 
 add_action('latepoint_init', 'agregar_sidebar_y_scripts');
@@ -250,7 +264,6 @@ function midocdoc_generar_pdf_handler() {
 
 add_action('init', 'midocdoc_generar_pdf_handler');
 
-
 // Agregar el manejador para la edición
 function midocdoc_edit_handler() {
     if (isset($_GET['midocdoc_editar'])) {
@@ -283,9 +296,9 @@ function registrar_script_edicion() {
         'nonce' => wp_create_nonce('midocdoc_update_report')
     ));
 }
+add_action('admin_enqueue_scripts', 'registrar_script_edicion');
 
-//Medoto para obtener informe médico
-
+// Método para obtener informe médico
 function get_informe_medico($idIform) {
     global $wpdb;
 
@@ -296,33 +309,43 @@ function get_informe_medico($idIform) {
     $table_recetas = $wpdb->prefix . 'midocdoc_recetas';
     $table_medicamentos = $wpdb->prefix . 'midocdoc_medicamentos';
 
-    // Consulta para obtener la información del informe médico
-    $query_informe = $wpdb->prepare("SELECT * FROM $table_informes WHERE id = %d", $idIform);
-    $informe_medico = $wpdb->get_row($query_informe, ARRAY_A);
+    // Obtener el informe médico
+    $informe_medico = $wpdb->get_row(
+        $wpdb->prepare("SELECT * FROM $table_informes WHERE id = %d", $idIform),
+        ARRAY_A
+    );
 
     if (!$informe_medico) {
         return null; // Informe no encontrado
     }
 
-    // Consulta para obtener la información de citas médicas
-    $query_citas = $wpdb->prepare("SELECT * FROM $table_citas_medicas WHERE id_inform = %d", $idIform);
-    $citas_medicas = $wpdb->get_results($query_citas, ARRAY_A);
+    // Obtener citas médicas
+    $citas_medicas = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $table_citas_medicas WHERE id_inform = %d", $idIform),
+        ARRAY_A
+    );
 
-    // Consulta para obtener la información de antecedentes médicos
-    $query_antecedentes = $wpdb->prepare("SELECT * FROM $table_antecedentes_medicos WHERE id_inform = %d", $idIform);
-    $antecedentes_medicos = $wpdb->get_results($query_antecedentes, ARRAY_A);
+    // Obtener antecedentes médicos
+    $antecedentes_medicos = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $table_antecedentes_medicos WHERE id_inform = %d", $idIform),
+        ARRAY_A
+    );
 
-    // Consulta para obtener la información de recetas
-    $query_recetas = $wpdb->prepare("SELECT * FROM $table_recetas WHERE id_inform = %d", $idIform);
-    $recetas = $wpdb->get_results($query_recetas, ARRAY_A);
+    // Obtener recetas y sus medicamentos
+    $recetas = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $table_recetas WHERE id_inform = %d", $idIform),
+        ARRAY_A
+    );
 
-    // Obtener los medicamentos asociados a cada receta
     foreach ($recetas as &$receta) {
-        $query_medicamentos = $wpdb->prepare("SELECT * FROM $table_medicamentos WHERE id_receta = %d", $receta['id']);
-        $receta['medicamentos'] = $wpdb->get_results($query_medicamentos, ARRAY_A);
+        $medicamentos = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $table_medicamentos WHERE id_receta = %d", $receta['id']),
+            ARRAY_A
+        );
+        $receta['medicamentos'] = $medicamentos;
     }
 
-    // Combinar toda la información en un solo array
+    // Combinar toda la información
     $informe_medico['citas_medicas'] = $citas_medicas;
     $informe_medico['antecedentes_medicos'] = $antecedentes_medicos;
     $informe_medico['recetas'] = $recetas;

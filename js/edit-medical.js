@@ -38,9 +38,23 @@ function buttonEditForm(event, informeId) {
 // Método para cerrar el sidebar
 function closeSidebarForm() {
     console.log('Cerrando el sidebar...');
-    let sidebar = document.getElementById('sidebar-form');
+    
+    // Cerrar el sidebar
+    let sidebar = document.getElementById('medicalReportsSidebar');
     if (sidebar) {
         sidebar.classList.remove('show'); // Esconde el sidebar deslizando
+        setTimeout(() => {
+            sidebar.style.display = 'none'; // Ocultar el sidebar después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
+    }
+
+    // Cerrar la superposición
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (overlay) {
+        overlay.classList.remove('active'); // Esconde la superposición
+        setTimeout(() => {
+            overlay.style.display = 'none'; // Ocultar la superposición después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
     }
 }
 
