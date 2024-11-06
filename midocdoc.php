@@ -15,6 +15,8 @@ require_once plugin_dir_path(__FILE__) . 'model/modelmidocdoc.php';
 
 // Crear tablas personalizadas
 function crear_tablas_personalizadas() {
+    ob_start(); 
+
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -106,6 +108,7 @@ function crear_tablas_personalizadas() {
         $sql = rtrim($sql, ',') . ") $charset_collate;";
         dbDelta($sql);
     }
+    ob_end_clean();
 }
 
 register_activation_hook(__FILE__, 'crear_tablas_personalizadas');
@@ -326,3 +329,4 @@ function get_informe_medico($idIform) {
 
     return $informe_medico;
 }
+?>
