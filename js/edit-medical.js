@@ -45,7 +45,7 @@ function closeSidebarForm() {
 }
 
 // Cerrar el sidebar cuando se presiona el botón "Cerrar"
-document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
+//document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
 
 // Función para eliminar medicamentos de la receta
 function eliminarMedicamentoEdit(event, idMedicamento) {

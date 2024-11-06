@@ -10,25 +10,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_receta = sanitize_text_field($_POST['id_receta']); // Obtener el ID de la receta
 
     // ****** Citas Medicas *******
-    $purpose_consult = sanitize_text_field($_POST['purpose_consult']);
-    $external_cause = sanitize_text_field($_POST['external_cause']);
-    $reason_consult = sanitize_text_field($_POST['reason_consult']);
-    $current_condition = sanitize_text_field($_POST['current_condition']);
-    $systems_review = sanitize_text_field($_POST['systems_review']);
-    $general_state = sanitize_text_field($_POST['general_state']);
-    $consciousness_state = sanitize_text_field($_POST['consciousness_state']);
-    $biometric_data = sanitize_text_field($_POST['biometric_data']);
-    $diagnosis = sanitize_text_field($_POST['diagnosis']);
-    $management_plan = sanitize_text_field($_POST['management_plan']);
-    $notes = sanitize_text_field($_POST['notes']);
-    $report = sanitize_text_field($_POST['report']);
-    $responsible = sanitize_text_field($_POST['responsible']);
-    $id_patient = sanitize_text_field($_POST['id_patient']);
+    $purpose_consult = isset($_POST['purpose_consult']) ? sanitize_text_field($_POST['purpose_consult']) : '';
+    $external_cause = isset($_POST['external_cause']) ? sanitize_text_field($_POST['external_cause']) : '';
+    $reason_consult = isset($_POST['reason_consult']) ? sanitize_text_field($_POST['reason_consult']) : '';
+    $current_condition = isset($_POST['current_condition']) ? sanitize_text_field($_POST['current_condition']) : '';
+    $systems_review = isset($_POST['systems_review']) ? sanitize_text_field($_POST['systems_review']) : '';
+    $general_state = isset($_POST['general_state']) ? sanitize_text_field($_POST['general_state']) : '';
+    $consciousness_state = isset($_POST['consciousness_state']) ? sanitize_text_field($_POST['consciousness_state']) : '';
+    $biometric_data = isset($_POST['biometric_data']) ? sanitize_text_field($_POST['biometric_data']) : '';
+    $diagnosis = isset($_POST['diagnosis']) ? sanitize_text_field($_POST['diagnosis']) : '';
+    $management_plan = isset($_POST['management_plan']) ? sanitize_text_field($_POST['management_plan']) : '';
+    $notes = isset($_POST['notes']) ? sanitize_text_field($_POST['notes']) : '';
+    $report = isset($_POST['report']) ? sanitize_text_field($_POST['report']) : '';
+    $responsible = isset($_POST['responsible']) ? sanitize_text_field($_POST['responsible']) : '';
+    $id_patient = isset($_POST['id_patient']) ? sanitize_text_field($_POST['id_patient']) : '';
 
     $current_user = wp_get_current_user();
     $user_id = $current_user->ID;
     $current_date = current_time('mysql');
-    $fechaReceta = sanitize_text_field($_POST['fecha_receta']);
+    $fechaReceta = isset($_POST['fecha_receta']) ? sanitize_text_field($_POST['fecha_receta']) : '';
 
     // Actualizar el informe médico
     $table_name = $wpdb->prefix . 'midocdoc_informes';

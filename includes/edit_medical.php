@@ -127,39 +127,37 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 
         <h2 class="form-title">Información General de la Consulta</h2>
 
-        <label class="label-form" for="purpose_consult">Objetivos de la Consulta:</label>
+        <label class="label-form" for="purpose_consult">Motivo de la Consulta:</label>
         <input type="text" id="purpose_consult" class="campo-con-contador os-form-control" name="purpose_consult" maxlength="255" value="<?php echo htmlspecialchars($purpose_consult ?? ''); ?>"><br><br>
 
-        <label class="label-form" for="external_cause">Causa Externa:</label>
+        <label class="label-form" for="external_cause" >Descripción detallada de los síntomas:</label>
         <input type="text" id="external_cause" class="campo-con-contador os-form-control" name="external_cause" maxlength="255" value="<?php echo htmlspecialchars($external_cause ?? ''); ?>"><br><br>
-
-        <label class="label-form" for="reason_consult">Razón de la Consulta:</label>
+          
+        <label class="label-form" for="reason_consult">Tratamientos previos:</label>
         <textarea id="reason_consult" name="reason_consult" class="os-form-control"><?php echo htmlspecialchars($reason_consult ?? ''); ?></textarea><br><br>
 
-        <h2 class="form-title">Evaluación del Paciente</h2>
-        <label class="label-form" for="current_condition">Condición Actual:</label>
+        <h2 class="form-title">Diagnóstico Presuntivo</h2>
+        <label class="label-form" for="current_condition">Diagnósticos iniciales: (basados en la evaluación clínica)</label>
         <textarea id="current_condition" name="current_condition" class="os-form-control"><?php echo htmlspecialchars($current_condition ?? ''); ?></textarea><br><br>
+        
+        <h2 class="form-title">Plan de Estudios y Tratamiento</h2>
 
-        <label class="label-form" for="systems_review">Revisión de Sistemas:</label>
+        <label class="label-form" for="systems_review">Laboratorios y estudios de imagen:</label>
         <textarea id="systems_review" name="systems_review" class="os-form-control"><?php echo htmlspecialchars($systems_review ?? ''); ?></textarea><br><br>
 
-        <label class="label-form" for="general_state">Estado General:</label>
+        <!--<label class="label-form" for="general_state">Estado General:</label>
         <input type="text" id="general_state" class="campo-con-contador os-form-control" name="general_state" maxlength="255" value="<?php echo htmlspecialchars($general_state ?? ''); ?>"><br><br>
 
         <label class="label-form" for="consciousness_state">Estado de Conciencia:</label>
         <input type="text" id="consciousness_state" class="campo-con-contador os-form-control" name="consciousness_state" maxlength="255" value="<?php echo htmlspecialchars($consciousness_state ?? ''); ?>"><br><br>
-
-        <h2 class="form-title">Datos Clínicos y Biométricos</h2>
-
-        <label class="label-form" for="biometric_data">Datos Biométricos:</label>
+          -->
+        <label class="label-form" for="biometric_data">Recomendaciones:</label>
         <textarea id="biometric_data" name="biometric_data" class="os-form-control"><?php echo htmlspecialchars($biometric_data ?? ''); ?></textarea><br><br>
-
-        <h2 class="form-title">Diagnóstico y Plan de Manejo</h2>
 
         <label class="label-form" for="diagnosis">Diagnóstico:</label>
         <textarea id="diagnosis" name="diagnosis" class="os-form-control"><?php echo htmlspecialchars($diagnosis ?? ''); ?></textarea><br><br>
 
-        <label class="label-form" for="management_plan">Plan de Manejo:</label>
+        <label class="label-form" for="management_plan">Plan de seguimiento:</label>
         <textarea id="management_plan" name="management_plan" class="os-form-control"><?php echo htmlspecialchars($management_plan ?? ''); ?></textarea><br><br>
         
         <h2 class="form-title">Notas y Reportes</h2>

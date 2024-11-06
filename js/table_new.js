@@ -15,44 +15,96 @@ function addNewColumn() {
     const tbody = table.querySelector('tbody');
     const tfoot = table.querySelector('tfoot');
 
+    /**
+     * Agrega una nueva columna a una fila de la tabla.
+     * @param {HTMLTableRowElement} row - La fila a la que se agregará la columna.
+     * @param {boolean} isHeader - Indica si la fila es de encabezado.
+     */
     const addColumnToRow = (row, isHeader = false) => {
-        const cell = document.createElement(isHeader ? 'th' : 'td');
+        // Crear la celda usando insertCell para mayor eficiencia
+        const cell = row.insertCell(2); // Insertar en el índice 2 (tercera columna)
         cell.textContent = isHeader ? 'Informes Médicos' : 'Ver Informes Médicos';
         cell.classList.add('informes-medicos');
-        row.insertBefore(cell, row.children[2]);
         return cell;
     };
 
-    if (thead) {
-        const headerRow = thead.querySelector('tr');
-        if (headerRow && !headerRow.querySelector('.informes-medicos')) {
-            addColumnToRow(headerRow, true);
-        }
-    }
-
-    if (tbody) {
-        tbody.querySelectorAll('tr').forEach(row => {
+    /**
+     * Procesa una colección de filas para agregar la nueva columna si no existe.
+     * @param {NodeListOf<HTMLTableRowElement>} rows - Las filas a procesar.
+     * @param {boolean} isHeader - Indica si las filas son de encabezado o pie.
+     */
+    const processRows = (rows, isHeader = false) => {
+        rows.forEach(row => {
             if (!row.querySelector('.informes-medicos')) {
-                const cell = addColumnToRow(row);
-                const customerId = row.getAttribute('data-os-params')?.match(/customer_id=(\d+)/)?.[1];
-                if (customerId) {
-                    cell.addEventListener('click', event => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        showMedicalReports(customerId);
-                    });
-                }
+                addColumnToRow(row, isHeader);
             }
         });
+    };
+
+    // Agregar columnas al encabezado
+    if (thead) {
+        const headerRows = thead.querySelectorAll('tr');
+        processRows(headerRows, true);
     }
 
+    // Agregar columnas al cuerpo
+    if (tbody) {
+        const bodyRows = tbody.querySelectorAll('tr');
+        processRows(bodyRows, false);
+    }
+
+    // Agregar columnas al pie
     if (tfoot) {
-        const footerRow = tfoot.querySelector('tr');
-        if (footerRow && !footerRow.querySelector('.informes-medicos')) {
-            addColumnToRow(footerRow, true);
+        const footerRows = tfoot.querySelectorAll('tr');
+        processRows(footerRows, true);
+    }
+
+    // Implementar Delegación de Eventos para manejar clics en las nuevas celdas
+    table.removeEventListener('click', handleCellClick); // Evitar múltiples listeners
+    table.addEventListener('click', handleCellClick);
+}
+
+/**
+ * Maneja el evento de clic en las celdas "Ver Informes Médicos".
+ * @param {MouseEvent} event - El evento de clic.
+ */
+function handleCellClick(event) {
+    const cell = event.target.closest('.informes-medicos');
+    if (cell) {
+        const row = cell.parentElement;
+        const dataParams = row.getAttribute('data-os-params');
+        const customerIdMatch = dataParams?.match(/customer_id=(\d+)/);
+        const customerId = customerIdMatch ? customerIdMatch[1] : null;
+
+        if (customerId) {
+            event.stopPropagation();
+            event.preventDefault();
+            showMedicalReports(customerId);
         }
     }
 }
+
+// Inicializar la función al cargar el DOM
+document.addEventListener('DOMContentLoaded', () => {
+    addNewColumn();
+
+    // Observador para detectar cambios en la tabla y re-ejecutar addNewColumn si es necesario
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                addNewColumn();
+                break; // Evita múltiples ejecuciones innecesarias
+            }
+        }
+    });
+
+    const tableContainer = document.querySelector('table');
+    if (tableContainer) {
+        observer.observe(tableContainer, { childList: true, subtree: true });
+    }
+});
+
+
 
 function showMedicalReports(customerId) {
     const newUrl = new URL(window.location.href);
@@ -94,108 +146,6 @@ function closeSidebar() {
         }
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    addNewColumn();
-
-    const pageSelector = document.getElementById('tablePaginationPageSelector');
-    if (pageSelector) {
-        pageSelector.addEventListener('change', addNewColumn);
-    }
-
-    const observer = new MutationObserver(mutationsList => {
-        mutationsList.forEach(mutation => {
-            if (mutation.type === 'childList') {
-                addNewColumn();
-            }
-        });
-    });
-
-    const tableContainer = document.querySelector('table');
-    if (tableContainer) {
-        observer.observe(tableContainer, { childList: true, subtree: true });
-    }
-
-    const closeSidebarButton = document.getElementById('closeSidebar');
-    if (closeSidebarButton) {
-        closeSidebarButton.addEventListener('click', closeSidebar);
-    }
-
-    const overlay = document.querySelector('.sidebar-overlay');
-    if (overlay) {
-        overlay.addEventListener('click', closeSidebar);
-    }
-
-    const currentUrl = new URL(window.location.href);
-    const customerId = currentUrl.searchParams.get("id");
-    window.medicamentos = window.medicamentos || [];
-
-    if (currentUrl.pathname.includes('customers__index')) {
-        const tabsContainer = document.createElement('div');
-        const tabButtons = ['Datos Básicos', 'Historial Médico', 'Informes Médicos'].map(text => {
-            const button = document.createElement('button');
-            button.textContent = text;
-            button.classList.add('midocdoc-category-filter-trigger');
-            return button;
-        });
-
-        const actualizarSeleccion = tabButton => {
-            tabButtons.forEach(button => button.classList.remove('is-selected'));
-            tabButton.classList.add('is-selected');
-        };
-
-        tabButtons[0].addEventListener('click', event => {
-            event.preventDefault();
-            actualizarSeleccion(event.target);
-            document.querySelectorAll('.white-box')[0].style.display = 'block';
-            document.querySelectorAll('.white-box')[1].style.display = 'none';
-            document.getElementById('tab3-content').style.display = 'none';
-        });
-
-        tabButtons[1].addEventListener('click', event => {
-            event.preventDefault();
-            actualizarSeleccion(event.target);
-            document.querySelectorAll('.white-box')[0].style.display = 'none';
-            document.querySelectorAll('.white-box')[1].style.display = 'block';
-            document.getElementById('tab3-content').style.display = 'none';
-        });
-
-        tabButtons[2].addEventListener('click', event => {
-            event.preventDefault();
-            actualizarSeleccion(event.target);
-            document.querySelectorAll('.white-box').forEach(box => box.style.display = 'none');
-            fetch(`${datosAjax.ajaxurl}?action=cargar_inform_content&id=${customerId}`)
-                .then(response => response.text())
-                .then(data => {
-                    const tab3Content = document.getElementById('tab3-content');
-                    tab3Content.innerHTML = data;
-                    tab3Content.style.display = 'block';
-                });
-        });
-
-        tabButtons.forEach(button => tabsContainer.appendChild(button));
-        document.querySelector('form').parentNode.insertBefore(tabsContainer, document.querySelector('form'));
-
-        const tab3Content = document.createElement('div');
-        tab3Content.id = 'tab3-content';
-        tab3Content.style.display = 'none';
-        document.querySelector('form').parentNode.insertBefore(tab3Content, document.querySelector('form'));
-
-        actualizarSeleccion(tabButtons[0]);
-        document.querySelectorAll('.white-box')[0].style.display = 'block';
-        document.querySelectorAll('.white-box')[1].style.display = 'none';
-    }
-
-    const logoW = document.querySelector('.logo-w');
-    if (logoW) {
-        logoW.innerHTML = '';
-        const nuevaImagen = document.createElement('img');
-        nuevaImagen.src = '../wp-content/plugins/midocdoc/img/logo-midocdoc.svg';
-        nuevaImagen.alt = 'logo midocdoc';
-        nuevaImagen.classList.add('logo-midocdoc');
-        logoW.appendChild(nuevaImagen);
-    }
-});
 
 function openForm(evt, formName) {
     const tabcontent = document.getElementsByClassName("tabcontent");

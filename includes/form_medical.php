@@ -73,30 +73,28 @@ $nombreMedico =  ' Dr: '. $first_name . ' ' . $last_name;
     <label class="label-form" for="reason_consult">Tratamientos previos:</label>
     <textarea id="reason_consult" name="reason_consult" class="os-form-control"></textarea><br><br>
 
-     <h2 class="form-title">Evaluación del Paciente</h2>
-    <label class="label-form" for="current_condition">Diagnóstico Presuntivo:</label>
+     <h2 class="form-title">Diagnóstico Presuntivo</h2>
+    <label class="label-form" for="current_condition">Diagnósticos iniciales: (basados en la evaluación clínica)</label>
     <textarea id="current_condition" name="current_condition" class="os-form-control"></textarea><br><br>
+    
+    <h2 class="form-title">Plan de Estudios y Tratamiento</h2>
 
-    <label class="label-form" for="systems_review">Plan de Estudios y Tratamiento:</label>
+    <label class="label-form" for="systems_review">Laboratorios y estudios de imagen:</label>
     <textarea id="systems_review" name="systems_review" class="os-form-control"></textarea><br><br>
 
-    <label class="label-form" for="general_state" style="display:none;">Estado General:</label>
+    <!--<label class="label-form" for="general_state" style="display:none;">Estado General:</label>
     <input style="display:none;" type="text" id="general_state" class="campo-con-contador os-form-control" name="general_state" maxlength="255"><br><br>
 
     <label class="label-form" for="consciousness_state">Estado de Conciencia:</label>
-    <input type="text" id="consciousness_state" class="campo-con-contador os-form-control" name="consciousness_state" maxlength="255"><br><br>
+    <input type="text" id="consciousness_state" class="campo-con-contador os-form-control" name="consciousness_state" maxlength="255"><br><br>-->
 
-    <h2 class="form-title">Datos Clínicos y Biométricos</h2>
-
-    <label class="label-form" for="biometric_data">Datos Biométricos:</label>
+    <label class="label-form" for="biometric_data">Recomendaciones:</label>
     <textarea id="biometric_data" name="biometric_data" class="os-form-control"></textarea><br><br>
-
-    <h2 class="form-title">Diagnóstico y Plan de Manejo</h2>
 
     <label class="label-form" for="diagnosis">Diagnóstico:</label>
     <textarea id="diagnosis" name="diagnosis" class="os-form-control"></textarea><br><br>
 
-    <label class="label-form" for="management_plan">Plan de Manejo:</label>
+    <label class="label-form" for="management_plan">Plan de seguimiento:</label>
     <textarea id="management_plan" name="management_plan" class="os-form-control"></textarea><br><br>
     
     <h2 class="form-title">Notas y Reportes</h2>

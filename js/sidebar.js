@@ -81,16 +81,16 @@ document.body.addEventListener('click', function(event) {
 
     
 // Método para cerrar el sidebar
-function closeSidebarForm() {
+/*function closeSidebarForm() {
     console.log('Cerrando el sidebar...');
     let sidebar = document.getElementById('sidebar-form');
     if (sidebar) {
         sidebar.classList.remove('show'); // Esconde el sidebar deslizando
     }
-}
+}*/
 
 // Cerrar el sidebar cuando se presiona el botón "Cerrar"
-document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
+//document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
 });
 
 });
