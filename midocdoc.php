@@ -116,6 +116,26 @@ register_activation_hook(__FILE__, 'crear_tablas_personalizadas');
 
 // Añadir scripts y estilos personalizados
 function mi_custom_tabs_script() {
+    ?>
+<div class="overlay-inform"></div>
+<div id="sidebar-form">
+    <button id="close-btn-inform" class="close-btn-inform" onclick="closeInformSidebar()">&times;</button>
+    <div id="container-para-formulario">
+        <!-- Aquí se cargará el formulario -->
+    </div>
+</div>
+
+<div class="sidebar-overlay"></div>
+<div id="medicalReportsSidebar" class="sidebar" style="display:none;">
+    <div class="sidebar-content">
+        <span id="closeSidebar" class="close-btn" onclick="closeMedicalReportsSidebar()">&times;</span>
+        <h2>Informes Médicos</h2>
+        <div id="medicalReportsContent">
+            <!-- Aquí se cargará el contenido del informe médico dinámicamente -->
+        </div>
+    </div>
+</div>
+    <?php
     $css_files = ['latepoin_inform.css'];
     $js_files = ['table_new.js', 'sidebar.js', 'edit-medical.js'];
 
@@ -164,10 +184,10 @@ add_action('wp_ajax_cargar_form_medical_content', 'cargar_form_medical_content')
 add_action('wp_ajax_nopriv_cargar_form_medical_content', 'cargar_form_medical_content');
 
 // Agregar sidebar y scripts
-function agregar_sidebar_y_scripts() {
+/*function agregar_sidebar_y_scripts() {
     // Verificar si los archivos existen antes de incluirlos
-    $sidebar_medical_reports_path = plugin_dir_path(__FILE__) . 'includes/sidebar-medical-reports.php';
-    $sidebar_inform_path = plugin_dir_path(__FILE__) . 'includes/sidebar-inform.php';
+    //$sidebar_medical_reports_path = plugin_dir_path(__FILE__) . 'includes/sidebar-medical-reports.php';
+    //$sidebar_inform_path = plugin_dir_path(__FILE__) . 'includes/sidebar-inform.php';
 
     if (file_exists($sidebar_medical_reports_path)) {
         include $sidebar_medical_reports_path;
@@ -182,7 +202,7 @@ function agregar_sidebar_y_scripts() {
     }
 }
 
-add_action('latepoint_init', 'agregar_sidebar_y_scripts');
+add_action('latepoint_init', 'agregar_sidebar_y_scripts');*/
 
 // Firma de usuario
 function permitir_carga_archivos_en_perfil() {

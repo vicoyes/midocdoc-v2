@@ -64,10 +64,9 @@ function addNewColumn() {
     table.addEventListener('click', handleCellClick);
 }
 
-/**
- * Maneja el evento de clic en las celdas "Ver Informes Médicos".
- * @param {MouseEvent} event - El evento de clic.
- */
+
+ //Maneja el evento de clic en las celdas "Ver Informes Médicos".
+
 function handleCellClick(event) {
     const cell = event.target.closest('.informes-medicos');
     if (cell) {
@@ -119,17 +118,22 @@ function showMedicalReports(customerId) {
         setTimeout(() => overlay.classList.add('active'), 10);
     }
 
-    sidebar.style.display = 'block';
-    setTimeout(() => sidebar.classList.add('active'), 10);
-
-    const medicalReportsContent = document.getElementById('medicalReportsContent');
-    medicalReportsContent.innerHTML = '<p>Cargando informe...</p>';
-
-    fetch(`${datosAjax.ajaxurl}?action=cargar_inform_content&id=${customerId}`)
-        .then(response => response.text())
-        .then(data => medicalReportsContent.innerHTML = data)
-        .catch(() => medicalReportsContent.innerHTML = '<p>Error al cargar el informe.</p>');
+    if (sidebar) {
+        sidebar.style.display = 'block';
+        setTimeout(() => sidebar.classList.add('active'), 10);
+        const medicalReportsContent = document.getElementById('medicalReportsContent');
+        if (medicalReportsContent) {
+            medicalReportsContent.innerHTML = '<p>Cargando informe...</p>';
+            fetch(`${datosAjax.ajaxurl}?action=cargar_inform_content&id=${customerId}`)
+                .then(response => response.text())
+                .then(data => medicalReportsContent.innerHTML = data)
+                .catch(() => medicalReportsContent.innerHTML = '<p>Error al cargar el informe.</p>');
+        }
+    } else {
+        console.error('El elemento #medicalReportsSidebar no se encontró en el DOM.');
+    }
 }
+
 
 function closeSidebar() {
     const sidebar = document.getElementById('medicalReportsSidebar');
