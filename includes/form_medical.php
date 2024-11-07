@@ -1,6 +1,7 @@
 <?php /* @var $customer OsCustomerModel */ ?>
 
 <?php
+require_once WP_PLUGIN_DIR . '/latepoint/lib/models/customer_model.php';
 
 session_start();
 $id_paciente = isset($_SESSION['id_paciente']) ? $_SESSION['id_paciente'] : null;

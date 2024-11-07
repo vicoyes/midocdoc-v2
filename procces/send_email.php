@@ -1,5 +1,6 @@
 <?php /* @var $customer OsCustomerModel */ ?>
 <?php
+require_once WP_PLUGIN_DIR . '/latepoint/lib/models/customer_model.php';
 if (!defined('ABSPATH')) {
     exit;
 }

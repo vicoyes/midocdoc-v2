@@ -1,6 +1,7 @@
 <?php /* @var $customer OsCustomerModel */ ?>
 
 <?php
+require_once WP_PLUGIN_DIR . '/latepoint/lib/models/customer_model.php';
 $idIform = isset($_GET['idinform']) ? $_GET['idinform'] : 'No se proporcionó ID';
 
 // Prueba de la función get_informe_medico

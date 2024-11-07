@@ -1,6 +1,8 @@
 <?php /* @var $customer OsCustomerModel */ ?>
 
 <?php
+require_once WP_PLUGIN_DIR . '/latepoint/lib/models/customer_model.php';
+
 $id_paciente = isset($_GET['id']) ? $_GET['id'] : 'No se proporcionó ID';
 session_start();
 $_SESSION['id_paciente'] = $id_paciente;

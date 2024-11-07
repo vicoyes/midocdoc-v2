@@ -273,7 +273,7 @@ function actualizarCitasMedicasForm() {
     formDataCompleto.append('nuevos_medicamentos', JSON.stringify(window.nuevosMedicamentos));
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '../wp-content/plugins/midocdoc/procces/formulario-medical-update.php', true);
+    xhr.open('POST', `${window.location.origin}/wp-content/plugins/midocdoc/process/formulario-medical-update.php`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             loadingMessage.style.display = 'none'; // Ocultar mensaje de carga

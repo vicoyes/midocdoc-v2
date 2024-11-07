@@ -2,6 +2,7 @@
 <?php
 require_once __DIR__ . '/../model/modelmidocdoc_pdf.php';
 require_once __DIR__ . '/../lib/dompdf/autoload.inc.php';
+require_once WP_PLUGIN_DIR . '/latepoint/lib/models/customer_model.php';
 
 use Dompdf\Dompdf;
 

@@ -387,7 +387,7 @@ function citasmedicasform() {
     formDataCompleto.append('fecha_receta', fechaReceta);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '../wp-content/plugins/midocdoc/procces/formulario-medical.php', true);
+    xhr.open('POST', `${window.location.origin}/wp-content/plugins/midocdoc/process/formulario-medical.php`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             loadingMessage.style.display = 'none'; // Ocultar mensaje de carga
