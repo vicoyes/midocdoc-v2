@@ -820,20 +820,6 @@ input#id_patient {
   justify-content: space-around;
 }
 
-#btn-listo {
-  background: #38406d;
-  padding: 10px 33px;
-  margin: 0 auto;
-  display: block;
-  text-align: center;
-  margin-top: 24px;
-  max-width: 280px;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
 .card-2 h4 {
   font-size: 14px;
   color: #2c408c;
@@ -1179,4 +1165,38 @@ td.informes-medicos {
   justify-content: center;
   align-items: center;
   height: 100%; /* Ajusta según sea necesario */
+}
+
+#botones {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+#ver-informe-pdf {
+  background: #38406d;
+  padding: 10px 33px;
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  max-width: 280px;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#btn-listo {
+  background: #788291;
+  padding: 10px 33px;
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  max-width: 280px;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
 }

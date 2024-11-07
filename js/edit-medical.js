@@ -284,11 +284,27 @@ function actualizarCitasMedicasForm() {
             buttonActualizar.style.cursor = ""; // Restaurar cursor
             if (xhr.status === 200) {
                 mensajeRespuesta.innerHTML = xhr.responseText;
-                const a = document.createElement("a");
-                a.id = "btn-listo";
-                a.innerHTML = "Volver";
-                a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
-                mensajeRespuesta.appendChild(a);
+
+                // Crear contenedor de botones
+                const botonesContainer = document.createElement("div");
+                botonesContainer.id = "botones";
+
+                // Botón "Volver"
+                const btnListo = document.createElement("a");
+                btnListo.id = "btn-listo";
+                btnListo.innerHTML = "Volver";
+                btnListo.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
+                botonesContainer.appendChild(btnListo);
+
+                // Botón "Ver Informe PDF"
+                const btnVerInforme = document.createElement("a");
+                btnVerInforme.id = "ver-informe-pdf";
+                btnVerInforme.innerHTML = "Ver Informe PDF";
+                btnVerInforme.href = `?midocdoc_generar_pdf=${registroId}`;
+                botonesContainer.appendChild(btnVerInforme);
+
+                mensajeRespuesta.appendChild(botonesContainer);
+
                 document.getElementById('contenedor-botones-update').style.display = "none";
                 document.querySelector('span.cerrar').style.display = "none";
             } else {
