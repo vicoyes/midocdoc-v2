@@ -51,7 +51,7 @@ foreach ($citas_medicas->informes as $informe) {
                 <a href="?midocdoc_generar_pdf=<?php echo $informe->id; ?>" 
                    class='button-action' 
                    target='_blank'>
-                    <i class='latepoint-icon latepoint-icon-paperclip'></i> Descargar
+                    <i class='latepoint-icon latepoint-icon-paperclip'></i> Ver PDF
                 </a>
                 <a class='button-action edit_form_button'  onclick=' buttonEditForm(event, <?php echo $informe->id; ?>)'>
                     <i class='latepoint-icon latepoint-icon-edit-3'></i> Editar

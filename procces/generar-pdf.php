@@ -262,7 +262,6 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
                 <br>
                 <div class="medicamento">
                     <p>ID de la Receta: <?php echo $receta->id; ?></p>
-                    <p>Fecha de la Receta: <?php echo $receta->fecha_receta; ?></p>
                     <h4>Medicamentos Prescritos</h4>
                     <table>
                         <tbody>

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Mi Doctor Plugin
 Description: Plugins informe del médico para Midocdoc importante: tiene que estar activo latepoint
-Version: 2.0
+Version: 2.0.1
 Author: Hector Muñoz midocdoc
 */
 
@@ -151,7 +151,7 @@ function mi_custom_tabs_script() {
 }
 
 add_action('latepoint_top_bar_before_actions', 'mi_custom_tabs_script');
-add_action('wp_enqueue_scripts', 'mi_custom_tabs_script');
+//add_action('wp_enqueue_scripts', 'mi_custom_tabs_script');
 
 // Cargar contenido específico (AJAX o directamente)
 function cargar_inform_content() {
