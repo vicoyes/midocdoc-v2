@@ -398,11 +398,32 @@ function citasmedicasform() {
             buttonGuardar.style.cursor = ""; // Restaurar cursor
             if (xhr.status === 200) {
                 mensajeRespuesta.innerHTML = xhr.responseText;
-                const a = document.createElement("a");
-                a.id = "btn-listo";
-                a.innerHTML = "Volver";
-                a.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
-                mensajeRespuesta.appendChild(a);
+            // Crear un elemento temporal para parsear la respuesta HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = xhr.responseText;
+                // Crear contenedor de botones
+                const botonesContainer = document.createElement("div");
+                botonesContainer.id = "botones";
+                const registroId = tempDiv.querySelector('#Respuestas-servidor').getAttribute('id-inform');
+
+                // Botón "Volver"
+                const btnListo = document.createElement("a");
+                btnListo.id = "btn-listo";
+                btnListo.innerHTML = "Volver";
+                btnListo.href = `${window.location.origin}/wp-admin/admin.php?page=latepoint&route_name=customers__index`;
+                btnListo.classList.add('BtnInformNew'); // Añadir clase para estilos
+                botonesContainer.appendChild(btnListo);
+
+                // Botón "Ver Informe PDF"
+                const btnVerInforme = document.createElement("a");
+                btnVerInforme.id = "ver-informe-pdf";
+                btnVerInforme.innerHTML = "Ver Informe PDF";
+                btnVerInforme.href = `?midocdoc_generar_pdf=${registroId}`;
+                btnVerInforme.classList.add('BtnInformNew'); // Añadir clase para estilos
+                botonesContainer.appendChild(btnVerInforme);
+
+                mensajeRespuesta.appendChild(botonesContainer);
+
                 document.getElementById('contenedor-botones-guarda').style.display = "none";
                 document.querySelector('span.cerrar').style.display = "none";
             } else {

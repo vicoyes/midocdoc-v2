@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_receta = $wpdb->insert_id;
 
     if ($wpdb->insert_id) {
-        echo '<div id="Respuestas-servidor"><b>La información del paciente se guardó correctamente.</b></div>';
+        echo '<div id="Respuestas-servidor" id-inform="' . $id_informe . '"><b>La información del paciente se guardó correctamente.</b></div>';
     } else {
         echo 'Error al enviar información del paciente';
     }
