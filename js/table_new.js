@@ -123,7 +123,11 @@ function showMedicalReports(customerId) {
         setTimeout(() => sidebar.classList.add('active'), 10);
         const medicalReportsContent = document.getElementById('medicalReportsContent');
         if (medicalReportsContent) {
-            medicalReportsContent.innerHTML = '<p>Cargando informe...</p>';
+            medicalReportsContent.innerHTML = `
+  <div class="center-content">
+    <div class="spinner-form"></div>
+  </div>
+`;
             fetch(`${datosAjax.ajaxurl}?action=cargar_inform_content&id=${customerId}`)
                 .then(response => response.text())
                 .then(data => medicalReportsContent.innerHTML = data)

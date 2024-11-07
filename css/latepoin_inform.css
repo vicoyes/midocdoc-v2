@@ -879,7 +879,7 @@ input#id_patient {
   background-color: #fff;
   box-shadow: -2px 0 5px rgba(0,0,0,0.1);
   transition: right 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 999;
   overflow-y: auto;
 }
 
@@ -1139,3 +1139,44 @@ div#firma_medico >img {
 
 }
 
+/* Añade esto a tu archivo CSS */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+
+td.informes-medicos {
+  color: #1d7bff;
+  text-decoration: underline dotted;
+}
+
+#wpbody-content > div.latepoint-all-wrapper.latepoint.latepoint-view-customers-index > div > div.latepoint-content-w > div.latepoint-content > div > div.os-customers-list > div > div > table > thead > tr:nth-child(1) > td, #wpbody-content > div.latepoint-all-wrapper.latepoint.latepoint-view-customers-index > div > div.latepoint-content-w > div.latepoint-content > div > div.os-customers-list > div > div > table > tfoot > tr > td {
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 10px;
+  padding: 5px 10px;
+  overflow: hidden;
+  font-weight: 600;
+  color: #41444b;
+  text-decoration: none;
+}
+#wpbody-content > div.latepoint-all-wrapper.latepoint.latepoint-view-customers-index > div > div.latepoint-content-w > div.latepoint-content > div > div.os-customers-list > div > div > table > thead > tr:nth-child(2) > td {
+  color: white;
+}
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ajusta según sea necesario */
+}

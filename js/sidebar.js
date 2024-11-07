@@ -70,6 +70,7 @@ document.body.addEventListener('click', function(event) {
                 
                 // Mostrar el sidebar deslizando
                 if (sidebar) {
+                    sidebar.style.display = 'block'; // Asegúrate de que el sidebar sea visible
                     sidebar.classList.add('show');
                 }
 
@@ -78,8 +79,6 @@ document.body.addEventListener('click', function(event) {
             })
             .catch(error => console.error('Error:', error));
     }
-
-
 });
 
 });

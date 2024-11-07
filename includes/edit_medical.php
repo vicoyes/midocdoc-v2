@@ -302,6 +302,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
         <?php foreach ($medicamentos as $medicamento): ?>
             <div class="medicamento" data-id="<?php echo $medicamento['id_medicamento']; ?>">
                 <ul>
+                    <li>ID: <?php echo $medicamento['id_medicamento']; ?></li>
                     <li>Descripción: <?php echo htmlspecialchars($medicamento['descricion']); ?></li>
                     <li>Presentación: <?php echo htmlspecialchars($medicamento['presentation']); ?></li>
                     <li>Concentración: <?php echo htmlspecialchars($medicamento['concentration']); ?></li>

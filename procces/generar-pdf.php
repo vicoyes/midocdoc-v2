@@ -128,7 +128,7 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
     <body>
     <div class="container">
         <div class="informe-header">
-            <img class="logo" src="https://midocdoc.com/wp-content/uploads/2023/07/DocDoc-Logo-Nuevo.png" alt="logo Mi Docddoc" width="130" height="25">
+            <img class="logo" src="https://midocdoc.com/wp-content/uploads/2024/08/Logo-Midocdoc-Nuevo.webp" alt="logo Mi Docddoc" width="130" height="25">
             <h1>Informe Médico</h1>
             <p>Fecha del Informe: <?php echo $informe->report_date; ?></p>
         </div>
@@ -154,46 +154,38 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
             <div class="cita">
                 <table>
                     <tbody>
-                        <tr>
-                            <td>Motivo de la Consulta:</td>
-                            <td><?php echo $cita->purpose_consult; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Descripción detallada de los síntomas:</td>
-                            <td><?php echo $cita->external_cause; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Tratamientos previos:</td>
-                            <td><?php echo $cita->reason_consult; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Diagnóstico Presuntivo:</td>
-                            <td><?php echo $cita->current_condition; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Plan de Estudios y Tratamiento:</td>
-                            <td><?php echo $cita->systems_review; ?></td>
-                        </tr>
-                        <tr style="display:none;">
-                            <td>Estado General:</td>
-                            <td><?php echo $cita->general_state; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Estado de Consciencia:</td>
-                            <td><?php echo $cita->consciousness_state; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Datos Biométricos:</td>
-                            <td><?php echo $cita->biometric_data; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Diagnóstico:</td>
-                            <td><?php echo $cita->diagnosis; ?></td>
-                        </tr>
-                        <tr>
-                            <td>Plan de Manejo:</td>
-                            <td><?php echo $cita->management_plan; ?></td>
-                        </tr>
+                    <tr>
+                    <td>Motivo de la Consulta:</td>
+                    <td><?php echo htmlspecialchars($cita->purpose_consult); ?></td>
+                </tr>
+                <tr>
+                    <td>Descripción detallada de los síntomas:</td>
+                    <td><?php echo htmlspecialchars($cita->external_cause); ?></td>
+                </tr>
+                <tr>
+                    <td>Tratamientos previos:</td>
+                    <td><?php echo htmlspecialchars($cita->reason_consult); ?></td>
+                </tr>
+                <tr>
+                    <td>Diagnósticos iniciales: (basados en la evaluación clínica)</td>
+                    <td><?php echo htmlspecialchars($cita->current_condition); ?></td>
+                </tr>
+                <tr>
+                    <td>Laboratorios y estudios de imagen:</td>
+                    <td><?php echo htmlspecialchars($cita->systems_review); ?></td>
+                </tr>
+                <tr>
+                    <td>Recomendaciones:</td>
+                    <td><?php echo htmlspecialchars($cita->biometric_data); ?></td>
+                </tr>
+                <tr>
+                    <td>Diagnóstico:</td>
+                    <td><?php echo htmlspecialchars($cita->diagnosis); ?></td>
+                </tr>
+                <tr>
+                    <td>Plan de seguimiento:</td>
+                    <td><?php echo htmlspecialchars($cita->management_plan); ?></td>
+                </tr>
                         <tr>
                             <td>Reporte:</td>
                             <td><?php echo $cita->report; ?></td>
@@ -314,19 +306,6 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
             echo 'No hay una firma cargada.';
         }
         ?>
-
-<?php
-if ($firma_id) {
-    // Obtener la URL de la imagen de firma
-    $firma_url = wp_get_attachment_url($firma_id);
-
-    // Mostrar la imagen
-    echo '<h4>Firma del Médico:</h4>';
-    echo '<img id="firma" src="' . esc_url($firma_url) . '" alt="Firma del Usuario">';
-} else {
-    echo 'No hay una firma cargada.';
-}
-?>
 
 
         <div class="footer">

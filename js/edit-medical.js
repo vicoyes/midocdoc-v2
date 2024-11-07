@@ -1,6 +1,7 @@
 // Arrays globales para almacenar los IDs de los medicamentos eliminados y los nuevos medicamentos agregados
 window.medicamentosEliminados = [];
 window.nuevosMedicamentos = [];
+window.medicamentos = [];
 
 function buttonEditForm(event, informeId) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
@@ -8,8 +9,7 @@ function buttonEditForm(event, informeId) {
     
     console.log('buttonEditForm called with informeId:', informeId);
     const ajaxUrl = `${datosAjax.ajaxurl}?action=cargar_edit_medical_content&idinform=${informeId}`;
-    console.log('AJAX URL:', ajaxUrl);
-
+    
     // Realizar la solicitud fetch
     fetch(ajaxUrl)
         .then(response => response.text())
@@ -23,8 +23,12 @@ function buttonEditForm(event, informeId) {
                 container.innerHTML = data;
             }
 
-            // Mostrar el sidebar deslizando
+            // Mostrar el sidebar deslizando con efecto de entrada
             if (sidebar) {
+                sidebar.style.display = 'block'; // Asegúrate de que el sidebar sea visible
+                sidebar.classList.remove('fade-in'); // Remover la clase si ya está presente
+                void sidebar.offsetWidth; // Forzar el reflow para reiniciar la animación
+                sidebar.classList.add('fade-in'); // Añadir la clase para la animación
                 sidebar.classList.add('show');
             }
 
@@ -34,18 +38,42 @@ function buttonEditForm(event, informeId) {
         })
         .catch(error => console.error('Error:', error));
 }
-
 // Método para cerrar el sidebar
 function closeInformSidebar() {
-    document.getElementById('sidebar-form').style.display = 'none';
-    document.querySelector('.overlay-inform').style.display = 'none';
+    let sidebar = document.getElementById('sidebar-form');
+    if (sidebar) {
+        sidebar.classList.remove('show'); // Esconde el sidebar deslizando
+        setTimeout(() => {
+            sidebar.style.display = 'none'; // Ocultar el sidebar después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
+    }
+
+    let overlay = document.querySelector('.overlay-inform');
+    if (overlay) {
+        overlay.classList.remove('active'); // Esconde la superposición
+        setTimeout(() => {
+            overlay.style.display = 'none'; // Ocultar la superposición después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
+    }
 }
 
 function closeMedicalReportsSidebar() {
-    document.getElementById('medicalReportsSidebar').style.display = 'none';
-    document.querySelector('.sidebar-overlay').style.display = 'none';
-}
+    let sidebar = document.getElementById('medicalReportsSidebar');
+    if (sidebar) {
+        sidebar.classList.remove('show'); // Esconde el sidebar deslizando
+        setTimeout(() => {
+            sidebar.style.display = 'none'; // Ocultar el sidebar después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
+    }
 
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (overlay) {
+        overlay.classList.remove('active'); // Esconde la superposición
+        setTimeout(() => {
+            overlay.style.display = 'none'; // Ocultar la superposición después de la animación
+        }, 300); // Ajusta el tiempo según la duración de la animación CSS
+    }
+}
 // Cerrar el sidebar cuando se presiona el botón "Cerrar"
 //document.querySelector('#close-btn-inform').addEventListener('click', closeSidebarForm);
 
@@ -53,6 +81,8 @@ function closeMedicalReportsSidebar() {
 function eliminarMedicamentoEdit(event, idMedicamento) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
     event.stopPropagation(); // Detener la propagación del evento
+
+    console.log('eliminarMedicamentoEdit called with medicamentoId:',idMedicamento);
 
     const confirmacion = confirm(`¿Estás seguro de que deseas eliminar el medicamento?`);
     if (confirmacion) {
