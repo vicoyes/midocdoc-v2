@@ -339,10 +339,7 @@ function iniciarAgregarMedicamento() {
       });
   }
   
-
-
-function citasmedicasform() {
-    //console.log('Medicamentos antes de enviar:', JSON.stringify(window.medicamentos));
+  function citasmedicasform() {
     const buttonGuardar = document.getElementById('guardar-informe');
     const buttonCancelar = document.getElementById('cancelar-informe');
     const loadingMessage = document.getElementById('loading');
@@ -386,8 +383,16 @@ function citasmedicasform() {
     formDataCompleto.append('medicamentos', JSON.stringify(window.medicamentos));
     formDataCompleto.append('fecha_receta', fechaReceta);
 
+    // Añadir el ID del paciente
+    const idPaciente = document.getElementById('id_paciente').value;
+    formDataCompleto.append('id_paciente', idPaciente);
+
+    // Obtener el ID de la receta desde el atributo data-id-receta
+    const recetaId = document.getElementById('listaMedicamentos').getAttribute('data-id-receta');
+    formDataCompleto.append('id_receta', recetaId);
+
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${window.location.origin}/wp-content/plugins/midocdoc/process/formulario-medical.php`, true);
+    xhr.open('POST', `${window.location.origin}/wp-admin/admin-ajax.php?action=crear_informe_medico`, true); // Usar la API de AJAX de WordPress
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             loadingMessage.style.display = 'none'; // Ocultar mensaje de carga
@@ -398,9 +403,11 @@ function citasmedicasform() {
             buttonGuardar.style.cursor = ""; // Restaurar cursor
             if (xhr.status === 200) {
                 mensajeRespuesta.innerHTML = xhr.responseText;
-            // Crear un elemento temporal para parsear la respuesta HTML
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = xhr.responseText;
+
+                // Crear un elemento temporal para parsear la respuesta HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = xhr.responseText;
+
                 // Crear contenedor de botones
                 const botonesContainer = document.createElement("div");
                 botonesContainer.id = "botones";
@@ -440,8 +447,7 @@ function citasmedicasform() {
     xhr.send(formDataCompleto);
 }
 
-
-
+  
 function mostrarPopup() {
     const popup = document.getElementById('miPopup');
     popup.classList.add('mostrado');

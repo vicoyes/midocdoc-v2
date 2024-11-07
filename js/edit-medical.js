@@ -215,6 +215,7 @@ function openForm(evt, formName) {
 }
 
 // Función para actualizar el formulario de citas médicas
+// Función para actualizar el formulario de citas médicas
 function actualizarCitasMedicasForm() {
     console.log('Medicamentos:', window.medicamentos);
     console.log('Nuevos Medicamentos:', window.nuevosMedicamentos); // Agregar un log para verificar
@@ -273,7 +274,7 @@ function actualizarCitasMedicasForm() {
     formDataCompleto.append('nuevos_medicamentos', JSON.stringify(window.nuevosMedicamentos));
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${window.location.origin}/wp-content/plugins/midocdoc/process/formulario-medical-update.php`, true);
+    xhr.open('POST', `${window.location.origin}/wp-admin/admin-ajax.php?action=actualizar_informe_medico`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             loadingMessage.style.display = 'none'; // Ocultar mensaje de carga

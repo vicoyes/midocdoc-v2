@@ -2,7 +2,7 @@
 /*
 Plugin Name: Mi Doctor Plugin
 Description: Plugins informe del médico para Midocdoc importante: tiene que estar activo latepoint
-Version: 2.0.4
+Version: 2.0.5
 Author: Hector Muñoz midocdoc
 */
 
@@ -327,10 +327,17 @@ add_action('init', 'midocdoc_edit_handler');
 
 // Agregar el endpoint AJAX para actualización
 function manejar_ajax_actualizar_informe() {
-    require_once plugin_dir_path(__FILE__) . 'formulario-medical-update.php';
+    require_once plugin_dir_path(__FILE__) . 'procces/formulario-medical-update.php';
     actualizar_informe_medico();
 }
 add_action('wp_ajax_actualizar_informe_medico', 'manejar_ajax_actualizar_informe');
+
+// Agregar el endpoint AJAX para creación de informe médico
+function manejar_ajax_crear_informe() {
+    require_once plugin_dir_path(__FILE__) . 'procces/formulario-medical.php';
+    crear_informe_medico();
+}
+add_action('wp_ajax_crear_informe_medico', 'manejar_ajax_crear_informe');
 
 // Registrar el script de edición
 function registrar_script_edicion() {
