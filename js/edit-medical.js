@@ -262,6 +262,7 @@ function actualizarCitasMedicasForm() {
     // Añadir el ID del registro que se va a actualizar
     const registroId = document.getElementById('registro_id').value;
     formDataCompleto.append('registro_id', registroId);
+    eliminarPDF(registroId); 
 
     // Obtener el ID de la receta desde el atributo data-id-receta
     const recetaId = document.getElementById('listaMedicamentos').getAttribute('data-id-receta');
@@ -297,4 +298,19 @@ function actualizarCitasMedicasForm() {
     };
 
     xhr.send(formDataCompleto);
+}
+
+function eliminarPDF(pdfId) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `${window.location.origin}/wp-admin/admin-ajax.php?action=midocdoc_eliminar_pdf&midocdoc_eliminar_pdf=${pdfId}`, true); // Asegúrate de que la ruta sea correcta
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log('PDF eliminado correctamente');
+            } else {
+                console.error('Error al eliminar PDF:', xhr.statusText);
+            }
+        }
+    };
+    xhr.send();
 }

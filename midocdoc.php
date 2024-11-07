@@ -280,7 +280,38 @@ function midocdoc_generar_pdf_handler() {
         midocdoc_enviar_email($id_paciente, $informe_id);
         exit;
     }
+
+    if (isset($_GET['action']) && $_GET['action'] === 'midocdoc_eliminar_pdf') {
+        $id_reporte = intval($_GET['midocdoc_eliminar_pdf']);
+        if (midocdoc_eliminar_pdf($id_reporte)) {
+            echo 'PDF eliminado correctamente';
+        } else {
+            echo 'Error al eliminar PDF';
+        }
+        exit;
+    }
+    
 }
+
+// funcion para eliminar pdf
+function midocdoc_eliminar_pdf($id_reporte) {
+    $upload_dir = wp_upload_dir();
+    $baseDir = $upload_dir['basedir'];
+    $carpetaDestino = $baseDir . '/midocdoc/reportes';
+    $tituloPdf = 'reporte_medico_' . $id_reporte . '.pdf';
+    $rutaPdf = $carpetaDestino . '/' . $tituloPdf;
+
+    if (file_exists($rutaPdf)) {
+        if (unlink($rutaPdf)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 
 add_action('init', 'midocdoc_generar_pdf_handler');
 
