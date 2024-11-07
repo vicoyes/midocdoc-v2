@@ -10,6 +10,21 @@ if (!defined('ABSPATH')) {
 }
 
 function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
+    $upload_dir = wp_upload_dir();
+    $baseDir = $upload_dir['basedir'];
+    $baseUrl = $upload_dir['baseurl'];
+    $carpetaDestino = $baseDir . '/midocdoc/reportes';
+    $tituloPdf = 'reporte_medico_' . $id_reporte . '.pdf';
+    $rutaPdf = $carpetaDestino . '/' . $tituloPdf;
+    $urlPdf = $baseUrl . '/midocdoc/reportes/' . $tituloPdf;
+
+    // Verificar si el archivo PDF ya existe
+    if (file_exists($rutaPdf) && !$onlySave) {
+        // Redirigir al usuario al archivo PDF existente
+        header('Location: ' . $urlPdf);
+        exit;
+    }
+
     $user_id = get_current_user_id();
     $user_info = get_userdata($user_id);
     $first_name = $user_info->first_name;
@@ -327,23 +342,15 @@ function midocdoc_generar_pdf($id_reporte, $onlySave = false) {
 
     $domPdf->render();
 
-    $tituloPdf = 'reporte_medico_' . $id_reporte . '.pdf';
-
-    if (!$onlySave) {
-        $domPdf->stream($tituloPdf, array('Attachment' => FALSE));
-    }
-
-    $upload_dir = wp_upload_dir();
-    $baseDir = $upload_dir['basedir'];
-    $carpetaDestino = $baseDir . '/midocdoc/reportes';
-
     if (!file_exists($carpetaDestino)) {
         mkdir($carpetaDestino, 0755, true);
     }
 
-    $rutaPdf = $carpetaDestino . '/' . $tituloPdf;
+    file_put_contents($rutaPdf, $domPdf->output());
 
-    if (!file_exists($rutaPdf)) {
-        file_put_contents($rutaPdf, $domPdf->output());
+    // Redirigir al usuario al archivo PDF generado
+    if (!$onlySave) {
+        header('Location: ' . $urlPdf);
+        exit;
     }
 }
