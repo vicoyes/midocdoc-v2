@@ -1200,3 +1200,16 @@ td.informes-medicos {
   border-radius: 5px;
   font-size: 16px;
 }
+
+#ver-detalles\ BtnInformNew {
+  color: white;
+  background: #2c408c;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+a#ver-detalles\ BtnInformNew:hover {
+
+  background: #424a6a;
+ 
+}
