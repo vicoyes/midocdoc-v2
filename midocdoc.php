@@ -2,9 +2,10 @@
 /*
 Plugin Name: Mi Doctor Plugin
 Description: Plugins informe del médico para Midocdoc importante: tiene que estar activo latepoint
-Version: 2.0.6
+Version: 2.0.7
 Author: Hector Muñoz midocdoc
 */
+
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
@@ -295,21 +296,41 @@ function midocdoc_generar_pdf_handler() {
 
 // funcion para eliminar pdf
 function midocdoc_eliminar_pdf($id_reporte) {
+    // Sanitize input and build paths
+    $id_reporte = absint($id_reporte);
     $upload_dir = wp_upload_dir();
-    $baseDir = $upload_dir['basedir'];
-    $carpetaDestino = $baseDir . '/midocdoc/reportes';
-    $tituloPdf = 'reporte_medico_' . $id_reporte . '.pdf';
-    $rutaPdf = $carpetaDestino . '/' . $tituloPdf;
+    $baseDir = trailingslashit($upload_dir['basedir']);
+    $carpetaDestino = trailingslashit($baseDir . 'midocdoc/reportes');
+    $tituloPdf = sanitize_file_name('reporte_medico_' . $id_reporte . '.pdf');
+    $rutaPdf = $carpetaDestino . $tituloPdf;
 
-    if (file_exists($rutaPdf)) {
-        if (unlink($rutaPdf)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
+    // Check if file exists
+    if (!file_exists($rutaPdf)) {
+        error_log("PDF no encontrado: {$rutaPdf}");
+        return [
+            'success' => false,
+            'error' => 'not_found'
+        ];
     }
+
+    // Attempt to delete file
+    if (!@unlink($rutaPdf)) {
+        $error = error_get_last();
+        error_log("Error al eliminar PDF {$rutaPdf}: " . ($error['message'] ?? 'Unknown error'));
+        return [
+            'success' => false,
+            'error' => 'delete_failed'
+        ];
+    }
+
+    // Clean up empty directory
+    if (is_dir($carpetaDestino) && count(glob("$carpetaDestino/*")) === 0) {
+        @rmdir($carpetaDestino);
+    }
+
+    return [
+        'success' => true
+    ];
 }
 
 
