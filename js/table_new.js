@@ -433,6 +433,7 @@ function iniciarAgregarMedicamento() {
 
                 document.getElementById('contenedor-botones-guarda').style.display = "none";
                 document.querySelector('span.cerrar').style.display = "none";
+                document.querySelector('#mensajes-gurdar').style.innerHTML = "Informe guardado correctamente";
             } else {
                 console.error('Error al enviar datos:', xhr.statusText);
             }

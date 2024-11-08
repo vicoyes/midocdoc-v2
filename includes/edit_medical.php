@@ -332,7 +332,7 @@ $firma_id = get_user_meta($user_id, 'firma-usuario-id', true);
 <div id="miPopup" class="popup">
     <div class="popup-contenido">
         <span class="cerrar" onclick="cerrarPopup()">&times;</span>
-        <p>¿Estás seguro de que deseas actualizar el informe médico?</p>
+        <p id="mensaje-actulizar">¿Estás seguro de que deseas actualizar el informe médico?</p>
         <div id="loading" style="display:none;">
             <div class="spinner-form"></div> Actualizando informe médico...
         </div>

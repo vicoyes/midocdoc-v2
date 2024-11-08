@@ -255,7 +255,7 @@ if ($firma_id) {
 <div id="miPopup" class="popup">
     <div class="popup-contenido">
         <span class="cerrar" onclick="cerrarPopup()">&times;</span>
-        <p style="text-align: center;">¿Estás seguro de que deseas guardar el informe médico?</p>
+        <p style="text-align: center;" id="mensajes-gurdar">¿Estás seguro de que deseas guardar el informe médico?</p>
         <div id="mensajeRespuesta"></div>
         <div id="loading" style="display:none;">
             <div class="spinner-form"></div> 

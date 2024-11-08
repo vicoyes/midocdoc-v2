@@ -2,7 +2,7 @@
 /*
 Plugin Name: Mi Doctor Plugin
 Description: Plugins informe del médico para Midocdoc importante: tiene que estar activo latepoint
-Version: 2.0.5
+Version: 2.0.6
 Author: Hector Muñoz midocdoc
 */
 

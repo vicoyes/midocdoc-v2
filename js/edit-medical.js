@@ -308,6 +308,7 @@ function actualizarCitasMedicasForm() {
 
                 document.getElementById('contenedor-botones-update').style.display = "none";
                 document.querySelector('span.cerrar').style.display = "none";
+                document.querySelector('#mensaje-actulizar').innerHTML = "Informe actualizado correctamente";
             } else {
                 console.error('Error al enviar datos:', xhr.statusText);
             }

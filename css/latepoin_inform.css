@@ -786,6 +786,7 @@ input#id_patient {
   font-size: 20px;
   padding: 20px;
   font-family: 'Inter', sans-serif;
+  text-align: center;
 }
 
 .popup.mostrado {
@@ -1212,4 +1213,17 @@ a#ver-detalles\ BtnInformNew:hover {
 
   background: #424a6a;
  
+}
+
+.logo-w > img {
+  display: none;
+}
+
+.logo-w {
+  /* display: none; */
+  background-image: url(https://midocdoc.com/wp-content/uploads/2024/08/Logo-Midocdoc-Nuevo.webp);
+  width: 120px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
