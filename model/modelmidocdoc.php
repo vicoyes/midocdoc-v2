@@ -74,4 +74,22 @@ class Midocdoc_Model {
         }
         return $recetas;
     }
+
+    // Nuevo método para obtener información completa solo por paciente
+    public function get_informacion_completa_medico_by_patient($id_paciente) {
+        $informacionMedico = new stdClass();
+        $informacionMedico->informes = $this->get_informes_by_patient($id_paciente);
+
+        foreach ($informacionMedico->informes as $informe) {
+            $informe->detalles = $this->get_detalle_informe($informe->id);
+        }
+
+        return $informacionMedico;
+    }
+
+    private function get_informes_by_patient($id_paciente) {
+        $table_name = $this->wpdb->prefix . 'midocdoc_informes';
+        $query = $this->wpdb->prepare("SELECT * FROM $table_name WHERE id_patient = %d", $id_paciente);
+        return $this->wpdb->get_results($query);
+    }
 }

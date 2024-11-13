@@ -431,4 +431,15 @@ function get_informe_medico($idIform) {
 
     return $informe_medico;
 }
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+// Define plugin URL and directory
+define('MIDOCDOC_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('MIDOCDOC_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('MIDOCDOC_VERSION', '1.0.0');
+
+// Ensure the class file is included
+require_once MIDOCDOC_PLUGIN_DIR . 'includes/class-midocdoc-shortcodes.php';
 ?>

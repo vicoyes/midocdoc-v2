@@ -573,16 +573,6 @@ body.latepoint-admin .latepoint-btn.latepoint-btn-secondary {
   color: white !important;
 }
 
-
-.latepoint-side-menu-w ul.side-menu>li:hover:not(.menu-item-is-active) ul.side-sub-menu {
-  background-color: var(--color-principal)!important;
-
-}
-
-.latepoint-side-menu-w ul.side-menu>li:hover:not(.menu-item-is-active) ul.side-sub-menu {
-  background-color:var(--color-principal)!important;
-}
-
 body.latepoint-admin .latepoint-btn.latepoint-btn-outline.latepoint-btn-grey, body.latepoint-admin .latepoint-btn.latepoint-btn-outline.latepoint-btn-secondary {
   color: #fff !important;
 }
