@@ -75,7 +75,7 @@ class Midocdoc_Model {
         return $recetas;
     }
 
-    // Nuevo método para obtener información completa solo por paciente
+    /*// Nuevo método para obtener información completa solo por paciente
     public function get_informacion_completa_medico_by_patient($id_paciente) {
         $informacionMedico = new stdClass();
         $informacionMedico->informes = $this->get_informes_by_patient($id_paciente);
@@ -91,5 +91,32 @@ class Midocdoc_Model {
         $table_name = $this->wpdb->prefix . 'midocdoc_informes';
         $query = $this->wpdb->prepare("SELECT * FROM $table_name WHERE id_patient = %d", $id_paciente);
         return $this->wpdb->get_results($query);
+    }*/
+    
+    // Nuevo método para obtener información completa solo por paciente con paginación
+
+    public function get_informacion_completa_medico_by_patient($id_paciente, $page = 1, $items_per_page = 20) {
+        $informacionMedico = new stdClass();
+        $informacionMedico->informes = $this->get_informes_by_patient($id_paciente, $page, $items_per_page);
+    
+        foreach ($informacionMedico->informes as $informe) {
+            $informe->detalles = $this->get_detalle_informe($informe->id);
+        }
+    
+        return $informacionMedico;
+    }
+    
+    private function get_informes_by_patient($id_paciente, $page = 1, $items_per_page = 20) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'midocdoc_informes';
+        $offset = ($page - 1) * $items_per_page;
+        $query = $wpdb->prepare("SELECT * FROM $table_name WHERE id_patient = %d LIMIT %d OFFSET %d", $id_paciente, $items_per_page, $offset);
+        return $wpdb->get_results($query);
+    }
+    
+    public function get_total_informes($id_paciente) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'midocdoc_informes';
+        return $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE id_patient = %d", $id_paciente));
     }
 }
