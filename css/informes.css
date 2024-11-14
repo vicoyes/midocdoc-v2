@@ -42,9 +42,6 @@
     margin-right: 5px;
 }
 
-#informes-container.grid-view .informe-item {
-    width: calc(33.333% - 20px); /* Three items per row */
-}
 
 #informes-container.list-view .informe-item {
     width: 100%; /* Full width for list view */
